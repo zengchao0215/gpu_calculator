@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Calculator, Cpu, Zap, History, Settings, Keyboard, Star } from 'lucide-react';
+import { Brain, Calculator, Cpu, Zap, History, Settings, Keyboard, Star, Users, MessageSquare, Image } from 'lucide-react';
 import { SimpleThemeToggle } from '@/components/ui/theme-toggle';
 import { useTheme } from '@/contexts/theme-context';
 import { useKeyboardShortcuts, getDefaultShortcuts } from '@/hooks/use-keyboard-shortcuts';
@@ -41,6 +41,22 @@ const FineTuningCalculator = dynamic(
   }
 );
 
+const GRPOCalculator = dynamic(
+  () => import('@/components/calculators/grpo-calculator').then(mod => ({ default: mod.GRPOCalculator })),
+  { 
+    loading: () => <div className="glass-card p-8 text-center">加载中...</div>,
+    ssr: false 
+  }
+);
+
+const MultimodalCalculator = dynamic(
+  () => import('@/components/calculators/multimodal-calculator').then(mod => ({ default: mod.MultimodalCalculator })),
+  { 
+    loading: () => <div className="glass-card p-8 text-center">加载中...</div>,
+    ssr: false 
+  }
+);
+
 // 懒加载面板组件
 const HistoryPanel = dynamic(() => import('@/components/history-panel'), {
   loading: () => <div className="glass-card p-8 text-center">加载历史记录...</div>,
@@ -52,11 +68,15 @@ const SettingsPanel = dynamic(() => import('@/components/settings-panel'), {
 
 export default function Home() {
   const { 
+    primaryTab,
+    setPrimaryTab,
     activeTab, 
     setActiveTab, 
     getCurrentResult, 
     history,
-    compareList 
+    compareList,
+    multimodalConfig,
+    setMultimodalConfig
   } = useCalculatorStore();
   
   const [showHistory, setShowHistory] = useState(false);
@@ -84,16 +104,30 @@ export default function Home() {
       toggleTheme();
       performanceMonitor.recordInteraction();
     },
-    switchToTraining: () => {
-      setActiveTab('training');
-      performanceMonitor.recordInteraction();
-    },
     switchToInference: () => {
       setActiveTab('inference');
       performanceMonitor.recordInteraction();
     },
+    switchToTraining: () => {
+      setActiveTab('training');
+      performanceMonitor.recordInteraction();
+    },
     switchToFineTuning: () => {
       setActiveTab('finetuning');
+      performanceMonitor.recordInteraction();
+    },
+    switchToGRPO: () => {
+      setActiveTab('grpo');
+      performanceMonitor.recordInteraction();
+    },
+    switchToMultimodal: () => {
+      setPrimaryTab('multimodal');
+      setActiveTab('inference'); // 切换到多模态的推理页
+      performanceMonitor.recordInteraction();
+    },
+    switchToNLP: () => {
+      setPrimaryTab('nlp');
+      setActiveTab('inference'); // 切换到NLP的推理页
       performanceMonitor.recordInteraction();
     },
     showHelp: () => {
@@ -196,65 +230,159 @@ export default function Home() {
           </div>
         </motion.header>
 
-        {/* 功能标签页 */}
+        {/* 功能标签页 - 二级分组结构 */}
         <motion.div
           className="max-w-7xl mx-auto"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'training' | 'inference' | 'finetuning')} className="w-full">
-            <div className="flex justify-center mb-8">
-              <TabsList className="grid w-full max-w-md grid-cols-3">
-                <TabsTrigger value="training" className="flex items-center gap-2">
-                  <Calculator className="w-4 h-4" />
-                  <span className="hidden sm:inline">训练显存</span>
-                  <span className="sm:hidden">训练</span>
+          {/* 主分组标签页 */}
+          <Tabs value={primaryTab} onValueChange={(value) => setPrimaryTab(value as typeof primaryTab)} className="w-full">
+            <div className="flex justify-center mb-6">
+              <TabsList className="grid w-full max-w-md grid-cols-2">
+                <TabsTrigger value="nlp" className="flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4" />
+                  <span>NLP/语言模型</span>
                 </TabsTrigger>
-                <TabsTrigger value="inference" className="flex items-center gap-2">
-                  <Cpu className="w-4 h-4" />
-                  <span className="hidden sm:inline">推理显存</span>
-                  <span className="sm:hidden">推理</span>
-                </TabsTrigger>
-                <TabsTrigger value="finetuning" className="flex items-center gap-2">
-                  <Zap className="w-4 h-4" />
-                  <span className="hidden sm:inline">微调显存</span>
-                  <span className="sm:hidden">微调</span>
+                <TabsTrigger value="multimodal" className="flex items-center gap-2">
+                  {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                  <Image className="w-4 h-4" />
+                  <span>多模态模型</span>
                 </TabsTrigger>
               </TabsList>
             </div>
 
-            <TabsContent value="training" className="space-y-8">
-              <motion.div
-                key="training-content"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <TrainingCalculator />
-              </motion.div>
+            {/* NLP模型组 */}
+            <TabsContent value="nlp" className="space-y-6">
+              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)} className="w-full">
+                <div className="flex justify-center mb-8">
+                  <TabsList className="grid w-full max-w-4xl grid-cols-4">
+                    <TabsTrigger value="inference" className="flex items-center gap-2">
+                      <Cpu className="w-4 h-4" />
+                      <span className="hidden sm:inline">推理显存</span>
+                      <span className="sm:hidden">推理</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="finetuning" className="flex items-center gap-2">
+                      <Zap className="w-4 h-4" />
+                      <span className="hidden sm:inline">微调显存</span>
+                      <span className="sm:hidden">微调</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="training" className="flex items-center gap-2">
+                      <Calculator className="w-4 h-4" />
+                      <span className="hidden sm:inline">训练显存</span>
+                      <span className="sm:hidden">训练</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="grpo" className="flex items-center gap-2">
+                      <Users className="w-4 h-4" />
+                      <span className="hidden sm:inline">GRPO</span>
+                      <span className="sm:hidden">GRPO</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="inference" className="space-y-8">
+                  <motion.div
+                    key="nlp-inference-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <InferenceCalculator />
+                  </motion.div>
+                </TabsContent>
+
+                <TabsContent value="finetuning" className="space-y-8">
+                  <motion.div
+                    key="nlp-finetuning-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <FineTuningCalculator />
+                  </motion.div>
+                </TabsContent>
+
+                <TabsContent value="training" className="space-y-8">
+                  <motion.div
+                    key="nlp-training-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <TrainingCalculator />
+                  </motion.div>
+                </TabsContent>
+
+                <TabsContent value="grpo" className="space-y-8">
+                  <motion.div
+                    key="nlp-grpo-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <GRPOCalculator />
+                  </motion.div>
+                </TabsContent>
+              </Tabs>
             </TabsContent>
 
-            <TabsContent value="inference" className="space-y-8">
-              <motion.div
-                key="inference-content"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <InferenceCalculator />
-              </motion.div>
-            </TabsContent>
+            {/* 多模态模型组 */}
+            <TabsContent value="multimodal" className="space-y-6">
+              <Tabs value={multimodalConfig.mode} onValueChange={(value) => setMultimodalConfig({ mode: value as 'training' | 'inference' | 'finetuning' })} className="w-full">
+                <div className="flex justify-center mb-8">
+                  <TabsList className="grid w-full max-w-3xl grid-cols-3">
+                    <TabsTrigger value="inference" className="flex items-center gap-2">
+                      <Cpu className="w-4 h-4" />
+                      <span className="hidden sm:inline">推理显存</span>
+                      <span className="sm:hidden">推理</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="finetuning" className="flex items-center gap-2">
+                      <Zap className="w-4 h-4" />
+                      <span className="hidden sm:inline">微调显存</span>
+                      <span className="sm:hidden">微调</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="training" className="flex items-center gap-2">
+                      <Calculator className="w-4 h-4" />
+                      <span className="hidden sm:inline">训练显存</span>
+                      <span className="sm:hidden">训练</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
-            <TabsContent value="finetuning" className="space-y-8">
-              <motion.div
-                key="finetuning-content"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <FineTuningCalculator />
-              </motion.div>
+                <TabsContent value="inference" className="space-y-8">
+                  <motion.div
+                    key="multimodal-inference-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <MultimodalCalculator mode="inference" />
+                  </motion.div>
+                </TabsContent>
+
+                <TabsContent value="finetuning" className="space-y-8">
+                  <motion.div
+                    key="multimodal-finetuning-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <MultimodalCalculator mode="finetuning" />
+                  </motion.div>
+                </TabsContent>
+
+                <TabsContent value="training" className="space-y-8">
+                  <motion.div
+                    key="multimodal-training-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <MultimodalCalculator mode="training" />
+                  </motion.div>
+                </TabsContent>
+              </Tabs>
             </TabsContent>
           </Tabs>
         </motion.div>
@@ -268,7 +396,17 @@ export default function Home() {
         >
           <GPURecommendations 
             requiredMemoryGB={requiredMemoryGB}
-            title={`${activeTab === 'training' ? '训练' : activeTab === 'inference' ? '推理' : '微调'}场景GPU推荐`}
+            title={`${
+              primaryTab === 'nlp' ? 'NLP' : '多模态'
+            }模型 - ${
+              primaryTab === 'multimodal' 
+                ? (multimodalConfig.mode === 'training' ? '训练' : 
+                   multimodalConfig.mode === 'inference' ? '推理' : '微调')
+                : (activeTab === 'training' ? '训练' : 
+                   activeTab === 'inference' ? '推理' : 
+                   activeTab === 'finetuning' ? '微调' :
+                   activeTab === 'grpo' ? 'GRPO' : '未知')
+            }场景GPU推荐`}
           />
         </motion.div>
 

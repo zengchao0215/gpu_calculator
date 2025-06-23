@@ -12,7 +12,7 @@ export interface HistoryItem {
 
 export interface ShareableResult {
   id: string;
-  type: 'training' | 'inference' | 'finetuning';
+  type: CalculatorType;
   config: Record<string, unknown>;
   result: MemoryBreakdown;
   timestamp: Date;
@@ -106,7 +106,9 @@ export function generateReport(historyItem: HistoryItem): string {
   const typeLabels = {
     training: '训练',
     inference: '推理', 
-    finetuning: '微调'
+    finetuning: '微调',
+    grpo: 'GRPO',
+    multimodal: '多模态'
   };
 
   const report = `
@@ -170,6 +172,26 @@ function formatConfigDetails(type: string, config: Record<string, unknown>): str
 - **LoRA参数**: rank=${config.loraRank || 'N/A'}, alpha=${config.loraAlpha || 'N/A'}
       `.trim();
       
+    case 'grpo':
+      return `
+- **模型**: ${config.modelId || 'N/A'}
+- **批次大小**: ${config.batchSize || 'N/A'}
+- **生成数量**: ${config.numGenerations || 'N/A'}
+- **精度**: ${(config.precision as string)?.toUpperCase() || 'FP16'}
+- **8位优化器**: ${config.use8BitOptimizer ? '启用' : '禁用'}
+- **梯度检查点**: ${config.gradientCheckpointing ? '启用' : '禁用'}
+      `.trim();
+      
+    case 'multimodal':
+      return `
+- **模型**: ${config.modelId || 'N/A'}
+- **批次大小**: ${config.batchSize || 'N/A'}
+- **图像数量**: ${config.numImages || 'N/A'}
+- **图像分辨率**: ${config.imageResolution || 'N/A'}x${config.imageResolution || 'N/A'}
+- **文本精度**: ${(config.textPrecision as string)?.toUpperCase() || 'FP16'}
+- **视觉精度**: ${(config.visionPrecision as string)?.toUpperCase() || 'FP16'}
+      `.trim();
+      
     default:
       return JSON.stringify(config, null, 2);
   }
@@ -206,7 +228,15 @@ export function exportToMarkdown(historyItem: HistoryItem): void {
 // 社交分享
 export function shareToSocial(platform: 'twitter' | 'linkedin' | 'reddit', historyItem: HistoryItem) {
   const shareLink = generateShareLink(historyItem);
-  const text = `我使用AI显存计算器分析了${historyItem.type === 'training' ? '训练' : historyItem.type === 'inference' ? '推理' : '微调'}场景的显存需求，结果显示需要${historyItem.result.total.toFixed(1)}GB显存。`;
+  const typeText = {
+    training: '训练',
+    inference: '推理',
+    finetuning: '微调',
+    grpo: 'GRPO',
+    multimodal: '多模态'
+  }[historyItem.type] || '未知';
+  
+  const text = `我使用AI显存计算器分析了${typeText}场景的显存需求，结果显示需要${historyItem.result.total.toFixed(1)}GB显存。`;
   
   let url = '';
   

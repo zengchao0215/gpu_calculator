@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AnimatedNumber } from '@/components/animated-number';
 import { LoadingOverlay } from '@/components/ui/loading-spinner';
 import { formatMemorySize } from '@/utils/memory-formulas';
-import { getModelById, MODELS_DATABASE } from '@/lib/models-data';
+import { getModelById, getModelsByCategoryAndArchitecture } from '@/lib/models-data';
 import { InferenceConfig, PrecisionType, QuantizationType } from '@/types';
 import { useCalculatorStore } from '@/store/calculator-store';
 
@@ -29,16 +29,9 @@ export function InferenceCalculator() {
     setConfig({ [key]: value });
   };
 
-  // 按系列分组模型
+  // 按系列分组NLP模型
   const modelsByCategory = useMemo(() => {
-    const grouped = MODELS_DATABASE.reduce((acc, model) => {
-      const category = model.name.split('-')[0];
-      if (!acc[category]) acc[category] = [];
-      acc[category].push(model);
-      return acc;
-    }, {} as Record<string, typeof MODELS_DATABASE>);
-    
-    return grouped;
+    return getModelsByCategoryAndArchitecture('nlp');
   }, []);
 
   return (

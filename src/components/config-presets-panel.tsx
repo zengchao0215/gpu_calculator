@@ -10,7 +10,7 @@ import { MemoryBreakdown } from '@/types';
 interface ConfigPresetsPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  currentType: 'training' | 'inference' | 'finetuning';
+  currentType: 'training' | 'inference' | 'finetuning' | 'grpo' | 'multimodal';
 }
 
 const categoryLabels = {
@@ -39,7 +39,10 @@ export function ConfigPresetsPanel({ isOpen, onClose, currentType }: ConfigPrese
     addToHistory 
   } = useCalculatorStore();
 
-  const allPresets = getPresetsByType(currentType);
+  // 暂时只支持原有的三种类型，新类型返回空数组
+  const allPresets = ['training', 'inference', 'finetuning'].includes(currentType)
+    ? getPresetsByType(currentType as 'training' | 'inference' | 'finetuning')
+    : [];
   
   const filteredPresets = searchQuery 
     ? searchPresets(searchQuery).filter(p => p.type === currentType)
@@ -59,6 +62,7 @@ export function ConfigPresetsPanel({ isOpen, onClose, currentType }: ConfigPrese
          case 'finetuning':
            setFineTuningConfig(preset.config);
            break;
+         // GRPO和多模态暂无预设配置
        }
 
       // 添加到历史记录

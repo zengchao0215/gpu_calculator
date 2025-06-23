@@ -46,21 +46,21 @@ export function TrainingCalculator() {
             <div className="flex items-center gap-2">
               <AnimatedNumber 
                 value={config.modelParams} 
-                format={(n) => `${n}B`}
+                format={(n) => `${Math.round(n)}B`}
                 className="text-sm font-mono text-blue-600"
               />
             </div>
           </div>
           <Slider
             value={[config.modelParams]}
-            onValueChange={([value]) => handleConfigChange('modelParams', value)}
+            onValueChange={([value]) => handleConfigChange('modelParams', Math.round(value))}
             max={175}
-            min={0.5}
-            step={0.5}
+            min={1}
+            step={1}
             className="w-full"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>0.5B</span>
+            <span>1B</span>
             <span>175B</span>
           </div>
         </div>

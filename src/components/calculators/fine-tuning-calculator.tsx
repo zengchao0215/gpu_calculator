@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AnimatedNumber } from '@/components/animated-number';
 import { LoadingOverlay } from '@/components/ui/loading-spinner';
 import { formatMemorySize } from '@/utils/memory-formulas';
-import { getModelById, MODELS_DATABASE } from '@/lib/models-data';
+import { getModelById, getModelsByCategoryAndArchitecture } from '@/lib/models-data';
 import { FineTuningConfig, FineTuningMethod, PrecisionType, QuantizationType } from '@/types';
 import { useCalculatorStore } from '@/store/calculator-store';
 
@@ -29,13 +29,16 @@ export function FineTuningCalculator() {
     setConfig({ [key]: value });
   };
 
-  // 按参数量分组模型
+  // 按参数量分组NLP模型
   const modelsBySize = useMemo(() => {
+    const nlpModels = getModelsByCategoryAndArchitecture('nlp');
+    const allNlpModels = Object.values(nlpModels).flat();
+    
     return {
-      small: MODELS_DATABASE.filter(m => m.params <= 3),
-      medium: MODELS_DATABASE.filter(m => m.params > 3 && m.params <= 15),
-      large: MODELS_DATABASE.filter(m => m.params > 15 && m.params <= 50),
-      xlarge: MODELS_DATABASE.filter(m => m.params > 50)
+      small: allNlpModels.filter(m => m.params <= 3),
+      medium: allNlpModels.filter(m => m.params > 3 && m.params <= 15),
+      large: allNlpModels.filter(m => m.params > 15 && m.params <= 50),
+      xlarge: allNlpModels.filter(m => m.params > 50)
     };
   }, []);
 

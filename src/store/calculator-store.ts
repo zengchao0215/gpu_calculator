@@ -4,13 +4,19 @@ import {
   TrainingConfig, 
   InferenceConfig, 
   FineTuningConfig,
+  GRPOConfig,
+  MultimodalConfig,
   MemoryBreakdown,
-  CalculatorType 
+  CalculatorType,
+  PrimaryTab,
+  NLP_CALCULATOR_TYPES
 } from '@/types';
 import { 
   calculateTrainingMemory, 
   calculateInferenceMemory, 
-  calculateFineTuningMemory 
+  calculateFineTuningMemory,
+  calculateGRPOMemory,
+  calculateMultimodalMemory
 } from '@/utils/memory-formulas';
 
 interface CalculationHistory {
@@ -24,7 +30,9 @@ interface CalculationHistory {
 }
 
 interface CalculatorStore {
-  // 当前活跃的标签页
+  // 当前活跃的主分组和子标签页
+  primaryTab: PrimaryTab;
+  setPrimaryTab: (tab: PrimaryTab) => void;
   activeTab: CalculatorType;
   setActiveTab: (tab: CalculatorType) => void;
 
@@ -32,6 +40,8 @@ interface CalculatorStore {
   _trainingTimeout?: NodeJS.Timeout;
   _inferenceTimeout?: NodeJS.Timeout;
   _fineTuningTimeout?: NodeJS.Timeout;
+  _grpoTimeout?: NodeJS.Timeout;
+  _multimodalTimeout?: NodeJS.Timeout;
 
   // 训练配置
   trainingConfig: TrainingConfig;
@@ -48,10 +58,22 @@ interface CalculatorStore {
   setFineTuningConfig: (config: Partial<FineTuningConfig>) => void;
   fineTuningResult: MemoryBreakdown | null;
 
+  // GRPO配置
+  grpoConfig: GRPOConfig;
+  setGrpoConfig: (config: Partial<GRPOConfig>) => void;
+  grpoResult: MemoryBreakdown | null;
+
+  // 多模态配置
+  multimodalConfig: MultimodalConfig;
+  setMultimodalConfig: (config: Partial<MultimodalConfig>) => void;
+  multimodalResult: MemoryBreakdown | null;
+
   // 加载状态
   trainingLoading: boolean;
   inferenceLoading: boolean;
   fineTuningLoading: boolean;
+  grpoLoading: boolean;
+  multimodalLoading: boolean;
 
   // 计算历史
   history: CalculationHistory[];
@@ -78,6 +100,8 @@ interface CalculatorStore {
   calculateTrainingMemory: () => Promise<void>;
   calculateInferenceMemory: () => Promise<void>;
   calculateFineTuningMemory: () => Promise<void>;
+  calculateGRPOMemory: () => Promise<void>;
+  calculateMultimodalMemory: () => Promise<void>;
   
   // 获取当前结果
   getCurrentResult: () => MemoryBreakdown | null;
@@ -87,7 +111,8 @@ export const useCalculatorStore = create<CalculatorStore>()(
   persist(
     (set, get) => ({
       // 初始状态
-      activeTab: 'training',
+      primaryTab: 'nlp',
+      activeTab: 'inference',
       
       // 训练配置默认值
       trainingConfig: {
@@ -123,10 +148,50 @@ export const useCalculatorStore = create<CalculatorStore>()(
       },
       fineTuningResult: null,
 
+      // GRPO配置默认值
+      grpoConfig: {
+        modelId: 'qwen2.5-7b',
+        precision: 'FP16',
+        batchSize: 4,
+        sequenceLength: 2048,
+        numGenerations: 8,
+        maxPromptLength: 512,
+        maxCompletionLength: 1536,
+        gradientAccumulationSteps: 4,
+        use8BitOptimizer: true,
+        gradientCheckpointing: true
+      },
+      grpoResult: null,
+
+      // 多模态配置默认值
+      multimodalConfig: {
+        modelId: 'qwen2.5-vl-7b',
+        mode: 'inference',
+        modalityType: 'text-image',
+        textPrecision: 'FP16',
+        visionPrecision: 'FP16',
+        audioPrecision: 'FP16',
+        batchSize: 2,
+        sequenceLength: 2048,
+        imageResolution: 336,
+        patchSize: 16,
+        numImages: 1,
+        hasVisionEncoder: true,
+        audioSampleRate: 16000,
+        audioWindowLength: 30,
+        hasAudioEncoder: true,
+        videoFrameRate: 25,
+        videoLength: 10,
+        hasVideoEncoder: true
+      },
+      multimodalResult: null,
+
       // 加载状态默认值
       trainingLoading: false,
       inferenceLoading: false,
       fineTuningLoading: false,
+      grpoLoading: false,
+      multimodalLoading: false,
 
       // 历史记录
       history: [],
@@ -141,20 +206,34 @@ export const useCalculatorStore = create<CalculatorStore>()(
       },
 
       // Actions
+      setPrimaryTab: (tab) => {
+        set({ primaryTab: tab });
+      },
+
       setActiveTab: (tab) => {
-        set({ activeTab: tab });
-        // 切换标签页时自动计算
         const state = get();
-        switch (tab) {
-          case 'training':
-            state.calculateTrainingMemory();
-            break;
-          case 'inference':
-            state.calculateInferenceMemory();
-            break;
-          case 'finetuning':
-            state.calculateFineTuningMemory();
-            break;
+        // 只处理NLP分组的标签页切换
+        if (NLP_CALCULATOR_TYPES.includes(tab)) {
+          set({ activeTab: tab, primaryTab: 'nlp' });
+          
+          // 切换NLP标签页时自动计算
+          switch (tab) {
+            case 'training':
+              state.calculateTrainingMemory();
+              break;
+            case 'inference':
+              state.calculateInferenceMemory();
+              break;
+            case 'finetuning':
+              state.calculateFineTuningMemory();
+              break;
+            case 'grpo':
+              state.calculateGRPOMemory();
+              break;
+          }
+        } else {
+          // 不是NLP类型的标签页，只更新activeTab（用于其他逻辑）
+          set({ activeTab: tab });
         }
       },
 
@@ -186,6 +265,33 @@ export const useCalculatorStore = create<CalculatorStore>()(
         clearTimeout(get()._fineTuningTimeout);
         const timeout = setTimeout(() => get().calculateFineTuningMemory(), 300);
         set({ _fineTuningTimeout: timeout });
+      },
+
+      setGrpoConfig: (config) => {
+        set((state) => ({
+          grpoConfig: { ...state.grpoConfig, ...config }
+        }));
+        // 防抖计算 - 300ms后执行
+        clearTimeout(get()._grpoTimeout);
+        const timeout = setTimeout(() => get().calculateGRPOMemory(), 300);
+        set({ _grpoTimeout: timeout });
+      },
+
+      setMultimodalConfig: (config) => {
+        set((state) => ({
+          multimodalConfig: { ...state.multimodalConfig, ...config }
+        }));
+        
+        // 如果是模式切换，立即计算；其他情况防抖计算
+        if (config.mode) {
+          // 模式切换时立即计算
+          get().calculateMultimodalMemory();
+        } else {
+          // 其他配置变化时防抖计算 - 300ms后执行
+          clearTimeout(get()._multimodalTimeout);
+          const timeout = setTimeout(() => get().calculateMultimodalMemory(), 300);
+          set({ _multimodalTimeout: timeout });
+        }
       },
 
       addToHistory: (type, config: unknown, result, modelName) => {
@@ -305,8 +411,59 @@ export const useCalculatorStore = create<CalculatorStore>()(
         }
       },
 
+      calculateGRPOMemory: async () => {
+        const { grpoConfig, preferences } = get();
+        set({ grpoLoading: true });
+        
+        try {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          // 从模型数据库获取模型信息
+          const { getModelById } = await import('@/lib/models-data');
+          const modelInfo = getModelById(grpoConfig.modelId);
+          const result = calculateGRPOMemory(grpoConfig, modelInfo);
+          set({ grpoResult: result, grpoLoading: false });
+          
+          // 自动保存到历史记录
+          if (preferences.autoSave) {
+            get().addToHistory('grpo', grpoConfig, result, modelInfo?.name || grpoConfig.modelId);
+          }
+        } catch (error) {
+          console.error('GRPO memory calculation error:', error);
+          set({ grpoResult: null, grpoLoading: false });
+        }
+      },
+
+      calculateMultimodalMemory: async () => {
+        const { multimodalConfig, preferences } = get();
+        set({ multimodalLoading: true });
+        
+        try {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          // 从模型数据库获取模型信息
+          const { getModelById } = await import('@/lib/models-data');
+          const modelInfo = getModelById(multimodalConfig.modelId);
+          const result = calculateMultimodalMemory(multimodalConfig, modelInfo);
+          set({ multimodalResult: result, multimodalLoading: false });
+          
+          // 自动保存到历史记录
+          if (preferences.autoSave) {
+            get().addToHistory('multimodal', multimodalConfig, result, modelInfo?.name || multimodalConfig.modelId);
+          }
+        } catch (error) {
+          console.error('Multimodal memory calculation error:', error);
+          set({ multimodalResult: null, multimodalLoading: false });
+        }
+      },
+
       getCurrentResult: () => {
-        const { activeTab, trainingResult, inferenceResult, fineTuningResult } = get();
+        const { primaryTab, activeTab, trainingResult, inferenceResult, fineTuningResult, grpoResult, multimodalResult } = get();
+        
+        // 如果是多模态分组，直接返回多模态结果
+        if (primaryTab === 'multimodal') {
+          return multimodalResult;
+        }
+        
+        // NLP分组根据activeTab返回对应结果
         switch (activeTab) {
           case 'training':
             return trainingResult;
@@ -314,6 +471,8 @@ export const useCalculatorStore = create<CalculatorStore>()(
             return inferenceResult;
           case 'finetuning':
             return fineTuningResult;
+          case 'grpo':
+            return grpoResult;
           default:
             return null;
         }
@@ -324,9 +483,13 @@ export const useCalculatorStore = create<CalculatorStore>()(
       storage: createJSONStorage(() => localStorage),
       // 只持久化配置和偏好，不持久化计算结果
       partialize: (state) => ({
+        primaryTab: state.primaryTab,
+        activeTab: state.activeTab,
         trainingConfig: state.trainingConfig,
         inferenceConfig: state.inferenceConfig,
         fineTuningConfig: state.fineTuningConfig,
+        grpoConfig: state.grpoConfig,
+        multimodalConfig: state.multimodalConfig,
         preferences: state.preferences,
         history: state.history.slice(0, 10), // 只保存最近10条历史记录
       }),

@@ -53,6 +53,9 @@ export const getDefaultShortcuts = (actions: {
   switchToTraining: () => void;
   switchToInference: () => void;
   switchToFineTuning: () => void;
+  switchToGRPO: () => void;
+  switchToMultimodal: () => void;
+  switchToNLP: () => void;
   showHelp: () => void;
 }): KeyboardShortcut[] => [
   {
@@ -91,6 +94,24 @@ export const getDefaultShortcuts = (actions: {
     ctrl: true,
     action: actions.switchToFineTuning,
     description: '切换到微调模式'
+  },
+  {
+    key: '4',
+    ctrl: true,
+    action: actions.switchToGRPO,
+    description: '切换到GRPO模式'
+  },
+  {
+    key: '5',
+    ctrl: true,
+    action: actions.switchToMultimodal,
+    description: '切换到多模态模式'
+  },
+  {
+    key: '6',
+    ctrl: true,
+    action: actions.switchToNLP,
+    description: '切换到NLP模式'
   },
   {
     key: '?',

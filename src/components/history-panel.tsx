@@ -190,9 +190,28 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                             <GitCompare className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={(e) => {
+                            onClick={async (e) => {
                               e.stopPropagation();
-                              navigator.clipboard.writeText(JSON.stringify(item.config, null, 2));
+                              try {
+                                if (navigator.clipboard && window.isSecureContext) {
+                                  await navigator.clipboard.writeText(JSON.stringify(item.config, null, 2));
+                                } else {
+                                  // 降级方案：使用传统的复制方法
+                                  const textArea = document.createElement('textarea');
+                                  textArea.value = JSON.stringify(item.config, null, 2);
+                                  document.body.appendChild(textArea);
+                                  textArea.focus();
+                                  textArea.select();
+                                  try {
+                                    document.execCommand('copy');
+                                  } catch (err) {
+                                    console.warn('复制失败:', err);
+                                  }
+                                  document.body.removeChild(textArea);
+                                }
+                              } catch (err) {
+                                console.warn('复制到剪贴板失败:', err);
+                              }
                             }}
                             className="glass-button !p-2 text-xs"
                           >
