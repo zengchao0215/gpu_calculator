@@ -36,7 +36,7 @@
 ### 单卡GPU推荐系统
 ![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-02.png)
 
-### 单卡GPU推荐系统
+### 多台多卡GPU推荐系统
 ![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-03.png)
 
 *智能GPU推荐系统，根据计算需求自动匹配最适合的GPU，包含利用率分析和价格对比*
