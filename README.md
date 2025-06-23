@@ -9,7 +9,7 @@
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
   [![React](https://img.shields.io/badge/React-19.0-blue)](https://reactjs.org/)
   
-  [在线演示](https://vram.wuhr.ai) | [报告问题](https://github.com/wuhr-ai/vram-calculator/issues) | [功能请求](https://github.com/wuhr-ai/vram-calculator/issues) | [博客](https://wuhrai.com)
+  [在线演示](https://vram.wuhrai.com) | [报告问题](https://github.com/st-lzh/vram-wuhrai/issues) | [功能请求](https://github.com/st-lzh/vram-wuhrai/issues) | [博客](https://wuhrai.com)
 </div>
 
 ## 📖 目录
@@ -23,6 +23,18 @@
 - [API文档](#-api文档)
 - [贡献指南](#-贡献指南)
 - [许可证](#-许可证)
+
+## 🖼️ 演示截图
+
+### 主界面 - 训练显存计算
+![训练显存计算界面](https://raw.githubusercontent.com/st-lzh/vram-wuhrai/main/docs/images/training-demo.png)
+
+*专业的训练显存计算界面，支持模型参数、批次大小、序列长度、精度等配置，实时显示显存需求和GPU推荐*
+
+### GPU推荐系统
+![GPU推荐界面](https://raw.githubusercontent.com/st-lzh/vram-wuhrai/main/docs/images/gpu-recommendation.png)
+
+*智能GPU推荐系统，根据计算需求自动匹配最适合的GPU，包含利用率分析和价格对比*
 
 ## ✨ 功能特性
 

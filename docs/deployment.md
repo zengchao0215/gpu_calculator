@@ -19,8 +19,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/yourusername/wuhr-ai-vram-insight.git
-cd wuhr-ai-vram-insight/ai-memory-calculator
+git clone https://github.com/st-lzh/vram-wuhrai.git
+cd vram-wuhrai
 
 # 构建 Docker 镜像
 docker build -t wuhr-ai-vram-insight:latest .
@@ -115,7 +115,7 @@ Fork 本项目到你的 GitHub 账号。
 1. 访问 [Vercel Dashboard](https://vercel.com/dashboard)
 2. 点击 "New Project"
 3. 导入你 fork 的仓库
-4. 选择 `ai-memory-calculator` 目录作为根目录
+4. 选择根目录作为项目目录
 5. 点击 "Deploy"
 
 ### 3. 自定义域名
@@ -151,8 +151,8 @@ sudo apt install -y nodejs
 sudo npm install -g pm2
 
 # 克隆项目
-git clone https://github.com/yourusername/wuhr-ai-vram-insight.git
-cd wuhr-ai-vram-insight/ai-memory-calculator
+git clone https://github.com/st-lzh/vram-wuhrai.git
+cd vram-wuhrai
 
 # 安装依赖
 npm install
@@ -178,7 +178,7 @@ module.exports = {
     name: 'wuhr-vram-insight',
     script: 'npm',
     args: 'start',
-    cwd: '/path/to/ai-memory-calculator',
+    cwd: '/path/to/vram-wuhrai',
     instances: 2,
     exec_mode: 'cluster',
     env: {
@@ -200,7 +200,7 @@ module.exports = {
 ```nginx
 server {
     listen 80;
-    server_name vram.wuhr.ai;
+    server_name vram.wuhrai.com;
 
     # 强制 HTTPS
     return 301 https://$server_name$request_uri;
@@ -208,7 +208,7 @@ server {
 
 server {
     listen 443 ssl http2;
-    server_name vram.wuhr.ai;
+    server_name vram.wuhrai.com;
 
     # SSL 证书
     ssl_certificate /etc/nginx/ssl/cert.pem;
@@ -263,7 +263,7 @@ sudo systemctl reload nginx
 sudo apt install certbot python3-certbot-nginx
 
 # 获取证书
-sudo certbot --nginx -d vram.wuhr.ai
+sudo certbot --nginx -d vram.wuhrai.com
 
 # 自动续期
 sudo certbot renew --dry-run
@@ -289,7 +289,7 @@ NODE_ENV=production
 NEXT_TELEMETRY_DISABLED=1
 
 # API 配置（如需要）
-API_URL=https://api.wuhr.ai
+API_URL=https://api.wuhrai.com
 API_KEY=your-api-key
 
 # 分析工具（可选）

@@ -34,11 +34,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Wuhr AI VRAM Insight",
     description: "Professional GPU memory calculator for AI models",
-    url: "https://vram.wuhr.ai",
+    url: "https://vram.wuhrai.com",
     siteName: "Wuhr AI VRAM Insight",
     images: [
       {
-        url: "https://vram.wuhr.ai/icon-512x512.png",
+        url: "https://vram.wuhrai.com/icon-512x512.png",
         width: 512,
         height: 512,
         alt: "Wuhr AI VRAM Insight Preview",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Wuhr AI VRAM Insight",
     description: "Professional GPU memory calculator for AI models",
-    images: ["https://vram.wuhr.ai/og-image.png"],
+    images: ["https://vram.wuhrai.com/icon-512x512.png"],
     creator: "@wuhr_ai",
   },
   viewport: {
