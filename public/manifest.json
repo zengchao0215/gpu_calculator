@@ -33,16 +33,16 @@
   "categories": ["productivity", "utilities"],
   "screenshots": [
     {
-      "src": "/screenshot-1.png",
+      "src": "https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/vram-1.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "主界面"
+      "label": "训练显存计算界面"
     },
     {
-      "src": "/screenshot-2.png",
+      "src": "https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/vram-2.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "计算结果"
+      "label": "GPU推荐系统"
     }
   ],
   "shortcuts": [
