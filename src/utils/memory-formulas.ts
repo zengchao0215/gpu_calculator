@@ -145,7 +145,7 @@ export function calculateTrainingMemory(config: TrainingConfig): MemoryBreakdown
 /**
  * 推理显存计算
  */
-export function calculateInferenceMemory(config: InferenceConfig, modelInfo?: any): MemoryBreakdown {
+export function calculateInferenceMemory(config: InferenceConfig, modelInfo?: { params?: number; hiddenSize?: number; numLayers?: number; numHeads?: number }): MemoryBreakdown {
   const { precision, quantization, batchSize, sequenceLength, kvCacheRatio } = config;
   
   // 从模型信息获取参数，如果没有则使用默认值
@@ -186,7 +186,7 @@ export function calculateInferenceMemory(config: InferenceConfig, modelInfo?: an
 /**
  * 微调显存计算
  */
-export function calculateFineTuningMemory(config: FineTuningConfig, modelInfo?: any): MemoryBreakdown {
+export function calculateFineTuningMemory(config: FineTuningConfig, modelInfo?: { params?: number }): MemoryBreakdown {
   const { method, loraRank = 4, quantization, precision } = config;
   
   // 从模型信息获取参数，如果没有则使用默认值

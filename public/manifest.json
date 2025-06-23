@@ -1,0 +1,64 @@
+{
+  "name": "Wuhr AI VRAM Insight",
+  "short_name": "VRAM Insight",
+  "description": "专业的AI模型显存计算器，支持训练、推理、微调三种模式",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "主界面"
+    },
+    {
+      "src": "/screenshot-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "计算结果"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "训练计算器",
+      "short_name": "训练",
+      "description": "打开训练显存计算器",
+      "url": "/?tab=training",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "推理计算器",
+      "short_name": "推理",
+      "description": "打开推理显存计算器",
+      "url": "/?tab=inference",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+} 

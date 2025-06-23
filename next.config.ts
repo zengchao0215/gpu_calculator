@@ -1,9 +1,35 @@
 import type { NextConfig } from "next";
 
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+  buildExcludes: [/middleware-manifest.json$/],
+  runtimeCaching: [
+    {
+      urlPattern: /^https?.*/,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'offlineCache',
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 86400, // 1 day
+        },
+      },
+    },
+  ],
+});
+
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
   compress: true,
+  
+  // 图片优化
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
   
   // 允许跨域请求（开发环境）
   async headers() {
@@ -21,4 +47,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = withPWA(nextConfig);

@@ -13,13 +13,42 @@ import { useErrorHandler } from '@/hooks/use-error-handler';
 import { usePerformanceMonitor } from '@/hooks/use-performance-monitor';
 import { useCalculatorStore } from '@/store/calculator-store';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrainingCalculator } from '@/components/calculators/training-calculator';
-import { InferenceCalculator } from '@/components/calculators/inference-calculator';
-import { FineTuningCalculator } from '@/components/calculators/fine-tuning-calculator';
+import dynamic from 'next/dynamic';
 import { GPURecommendations } from '@/components/gpu-recommendations';
-// import { ResponsiveContainer, useResponsive } from '@/components/ui/responsive-container';
-import HistoryPanel from '@/components/history-panel';
-import SettingsPanel from '@/components/settings-panel';
+
+// 懒加载计算器组件
+const TrainingCalculator = dynamic(
+  () => import('@/components/calculators/training-calculator').then(mod => ({ default: mod.TrainingCalculator })),
+  { 
+    loading: () => <div className="glass-card p-8 text-center">加载中...</div>,
+    ssr: false 
+  }
+);
+
+const InferenceCalculator = dynamic(
+  () => import('@/components/calculators/inference-calculator').then(mod => ({ default: mod.InferenceCalculator })),
+  { 
+    loading: () => <div className="glass-card p-8 text-center">加载中...</div>,
+    ssr: false 
+  }
+);
+
+const FineTuningCalculator = dynamic(
+  () => import('@/components/calculators/fine-tuning-calculator').then(mod => ({ default: mod.FineTuningCalculator })),
+  { 
+    loading: () => <div className="glass-card p-8 text-center">加载中...</div>,
+    ssr: false 
+  }
+);
+
+// 懒加载面板组件
+const HistoryPanel = dynamic(() => import('@/components/history-panel'), {
+  loading: () => <div className="glass-card p-8 text-center">加载历史记录...</div>,
+});
+
+const SettingsPanel = dynamic(() => import('@/components/settings-panel'), {
+  loading: () => <div className="glass-card p-8 text-center">加载设置...</div>,
+});
 
 export default function Home() {
   const { 
@@ -294,6 +323,26 @@ export default function Home() {
             </p>
             <p className="text-xs text-gray-500 mt-2">
               支持训练、推理、微调三种场景 • 50+模型数据库 • 20+GPU规格对比
+            </p>
+            <div className="mt-4 flex justify-center items-center gap-4 text-xs">
+              <a href="https://wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
+                博客
+              </a>
+              <span className="text-gray-300 dark:text-gray-600">|</span>
+              <a href="https://ai.wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
+                模型API
+              </a>
+              <span className="text-gray-300 dark:text-gray-600">|</span>
+              <a href="https://gpt.wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
+                模型Chat
+              </a>
+              <span className="text-gray-300 dark:text-gray-600">|</span>
+              <a href="mailto:1139804291@qq.com" className="text-blue-500 hover:text-blue-600 transition-colors">
+                联系我们
+              </a>
+            </div>
+            <p className="text-xs text-gray-400 mt-3">
+              Made with ❤️ by <a href="https://wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Wuhr AI Team</a>
             </p>
           </div>
         </motion.footer>

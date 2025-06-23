@@ -1,0 +1,14 @@
+# Wuhr AI VRAM Insight Robots.txt
+# https://vram.wuhr.ai
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Sitemap
+Sitemap: https://vram.wuhr.ai/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1 

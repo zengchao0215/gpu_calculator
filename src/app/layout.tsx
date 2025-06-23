@@ -16,6 +16,54 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Wuhr AI VRAM Insight - Professional GPU Memory Calculator",
   description: "Professional AI model VRAM calculator supporting training, inference & fine-tuning modes with precise formulas based on latest engineering practices",
+  keywords: ["AI", "GPU", "VRAM", "Memory Calculator", "Deep Learning", "Machine Learning", "Training", "Inference", "Fine-tuning"],
+  authors: [{ name: "Wuhr AI Team", url: "https://wuhrai.com" }],
+  creator: "Wuhr AI",
+  publisher: "Wuhr AI",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    title: "Wuhr AI VRAM Insight",
+    description: "Professional GPU memory calculator for AI models",
+    url: "https://vram.wuhr.ai",
+    siteName: "Wuhr AI VRAM Insight",
+    images: [
+      {
+        url: "https://vram.wuhr.ai/icon-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "Wuhr AI VRAM Insight Preview",
+      },
+    ],
+    locale: "zh_CN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Wuhr AI VRAM Insight",
+    description: "Professional GPU memory calculator for AI models",
+    images: ["https://vram.wuhr.ai/og-image.png"],
+    creator: "@wuhr_ai",
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
