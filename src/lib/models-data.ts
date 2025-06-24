@@ -130,13 +130,128 @@ export const MODELS_DATABASE: ModelInfo[] = [
 
   // DeepSeek系列
   {
+    id: 'deepseek-v3-671b',
+    name: 'DeepSeek-V3-671B (满血版)',
+    params: 671.0,
+    architecture: 'moe',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 56,
+    vocabSize: 129000,
+    activeParams: 37.0
+  },
+  {
+    id: 'deepseek-v3-0324',
+    name: 'DeepSeek-V3-0324',
+    params: 671.0,
+    architecture: 'moe',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 56,
+    vocabSize: 129000,
+    activeParams: 37.0
+  },
+  {
+    id: 'deepseek-r1-671b',
+    name: 'DeepSeek-R1-671B (满血版)',
+    params: 671.0,
+    architecture: 'moe',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 56,
+    vocabSize: 129000,
+    activeParams: 37.0
+  },
+  {
     id: 'deepseek-r1-0528',
-    name: 'DeepSeek-R1-0528',
+    name: 'DeepSeek-R1-0528 (最新版)',
+    params: 685.0,
+    architecture: 'moe',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 56,
+    vocabSize: 129000,
+    activeParams: 37.0
+  },
+  {
+    id: 'deepseek-ai-deepseek-r1-0528',
+    name: 'deepseek-ai/DeepSeek-R1-0528',
+    params: 685.0,
+    architecture: 'moe',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 56,
+    vocabSize: 129000,
+    activeParams: 37.0
+  },
+  {
+    id: 'deepseek-ai-deepseek-r1-0528-qwen3-8b',
+    name: 'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B',
+    params: 8.0,
+    architecture: 'transformer',
+    hiddenSize: 4096,
+    numLayers: 32,
+    numHeads: 32,
+    vocabSize: 151936
+  },
+  {
+    id: 'deepseek-r1-70b',
+    name: 'DeepSeek-R1-70B',
     params: 70.0,
     architecture: 'transformer',
     hiddenSize: 8192,
     numLayers: 80,
     numHeads: 64,
+    vocabSize: 128000
+  },
+  {
+    id: 'deepseek-r1-32b',
+    name: 'DeepSeek-R1-32B',
+    params: 32.0,
+    architecture: 'transformer',
+    hiddenSize: 6400,
+    numLayers: 64,
+    numHeads: 50,
+    vocabSize: 128000
+  },
+  {
+    id: 'deepseek-r1-14b',
+    name: 'DeepSeek-R1-14B',
+    params: 14.0,
+    architecture: 'transformer',
+    hiddenSize: 5120,
+    numLayers: 48,
+    numHeads: 40,
+    vocabSize: 128000
+  },
+  {
+    id: 'deepseek-r1-8b',
+    name: 'DeepSeek-R1-8B',
+    params: 8.0,
+    architecture: 'transformer',
+    hiddenSize: 4096,
+    numLayers: 32,
+    numHeads: 32,
+    vocabSize: 128000
+  },
+  {
+    id: 'deepseek-r1-7b',
+    name: 'DeepSeek-R1-7B',
+    params: 7.0,
+    architecture: 'transformer',
+    hiddenSize: 4096,
+    numLayers: 32,
+    numHeads: 32,
+    vocabSize: 128000
+  },
+  {
+    id: 'deepseek-r1-1.5b',
+    name: 'DeepSeek-R1-1.5B',
+    params: 1.5,
+    architecture: 'transformer',
+    hiddenSize: 1536,
+    numLayers: 28,
+    numHeads: 12,
     vocabSize: 128000
   },
   {
@@ -244,6 +359,36 @@ export const MODELS_DATABASE: ModelInfo[] = [
 
   // ChatGLM系列
   {
+    id: 'glm-4-9b',
+    name: 'GLM-4-9B',
+    params: 9.0,
+    architecture: 'glm',
+    hiddenSize: 4096,
+    numLayers: 40,
+    numHeads: 32,
+    vocabSize: 151329
+  },
+  {
+    id: 'glm-4-plus',
+    name: 'GLM-4-Plus',
+    params: 100.0,
+    architecture: 'glm',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 151329
+  },
+  {
+    id: 'glm-z1-32b',
+    name: 'GLM-Z1-32B (推理模型)',
+    params: 32.0,
+    architecture: 'glm',
+    hiddenSize: 6400,
+    numLayers: 64,
+    numHeads: 50,
+    vocabSize: 151329
+  },
+  {
     id: 'chatglm3-6b',
     name: 'ChatGLM3-6B',
     params: 6.0,
@@ -286,7 +431,151 @@ export const MODELS_DATABASE: ModelInfo[] = [
     vocabSize: 125696
   },
 
+  // MiniMax系列
+  {
+    id: 'minimax-abab6.5',
+    name: 'MiniMax-ABAB6.5',
+    params: 100.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 250000
+  },
+  {
+    id: 'minimax-abab6.5s',
+    name: 'MiniMax-ABAB6.5s',
+    params: 70.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 70,
+    numHeads: 64,
+    vocabSize: 250000
+  },
+
+  // 月之暗面系列
+  {
+    id: 'moonshot-v1-128k',
+    name: 'Moonshot-v1-128K',
+    params: 70.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 151936
+  },
+  {
+    id: 'moonshot-v1-32k',
+    name: 'Moonshot-v1-32K',
+    params: 70.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 151936
+  },
+
+  // 阶跃星辰系列
+  {
+    id: 'step-1v',
+    name: 'Step-1V',
+    params: 300.0,
+    architecture: 'multimodal',
+    hiddenSize: 8192,
+    numLayers: 100,
+    numHeads: 64,
+    vocabSize: 200000
+  },
+  {
+    id: 'step-2',
+    name: 'Step-2',
+    params: 800.0,
+    architecture: 'moe',
+    hiddenSize: 8192,
+    numLayers: 120,
+    numHeads: 64,
+    vocabSize: 200000,
+    activeParams: 40.0
+  },
+
+  // 书生·浦语系列
+  {
+    id: 'internlm2.5-7b',
+    name: 'InternLM2.5-7B',
+    params: 7.0,
+    architecture: 'transformer',
+    hiddenSize: 4096,
+    numLayers: 32,
+    numHeads: 32,
+    vocabSize: 92544
+  },
+  {
+    id: 'internlm2.5-20b',
+    name: 'InternLM2.5-20B',
+    params: 20.0,
+    architecture: 'transformer',
+    hiddenSize: 6144,
+    numLayers: 48,
+    numHeads: 48,
+    vocabSize: 92544
+  },
+
+  // 星火系列
+  {
+    id: 'spark-max',
+    name: 'Spark-Max',
+    params: 340.0,
+    architecture: 'moe',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 100000,
+    activeParams: 30.0
+  },
+  {
+    id: 'spark-pro',
+    name: 'Spark-Pro',
+    params: 175.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 96,
+    numHeads: 64,
+    vocabSize: 100000
+  },
+
   // Yi系列
+  {
+    id: 'yi-lightning',
+    name: 'Yi-Lightning',
+    params: 1000.0,
+    architecture: 'moe',
+    hiddenSize: 8192,
+    numLayers: 100,
+    numHeads: 64,
+    vocabSize: 200000,
+    activeParams: 50.0
+  },
+  {
+    id: 'yi-large',
+    name: 'Yi-Large',
+    params: 100.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 200000
+  },
+  {
+    id: 'yi-medium',
+    name: 'Yi-Medium',
+    params: 200.0,
+    architecture: 'moe',
+    hiddenSize: 6400,
+    numLayers: 60,
+    numHeads: 50,
+    vocabSize: 200000,
+    activeParams: 20.0
+  },
   {
     id: 'yi-6b',
     name: 'Yi-6B',
@@ -402,6 +691,68 @@ export const MODELS_DATABASE: ModelInfo[] = [
     vocabSize: 32016
   },
 
+  // Qwen向量模型系列
+  {
+    id: 'qwen3-embedding-0.6b',
+    name: 'Qwen3-Embedding-0.6B',
+    params: 0.6,
+    architecture: 'embedding',
+    hiddenSize: 768,
+    numLayers: 12,
+    numHeads: 12,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwen3-embedding-4b',
+    name: 'Qwen3-Embedding-4B',
+    params: 4.0,
+    architecture: 'embedding',
+    hiddenSize: 2048,
+    numLayers: 24,
+    numHeads: 16,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwen3-embedding-8b',
+    name: 'Qwen3-Embedding-8B',
+    params: 8.0,
+    architecture: 'embedding',
+    hiddenSize: 4096,
+    numLayers: 32,
+    numHeads: 32,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwen3-reranker-0.6b',
+    name: 'Qwen3-Reranker-0.6B',
+    params: 0.6,
+    architecture: 'reranker',
+    hiddenSize: 768,
+    numLayers: 12,
+    numHeads: 12,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwen3-reranker-4b',
+    name: 'Qwen3-Reranker-4B',
+    params: 4.0,
+    architecture: 'reranker',
+    hiddenSize: 2048,
+    numLayers: 24,
+    numHeads: 16,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwen3-reranker-8b',
+    name: 'Qwen3-Reranker-8B',
+    params: 8.0,
+    architecture: 'reranker',
+    hiddenSize: 4096,
+    numLayers: 32,
+    numHeads: 32,
+    vocabSize: 151936
+  },
+
   // 多模态模型 - 视觉语言模型
   {
     id: 'qwen2-vl-7b',
@@ -441,6 +792,26 @@ export const MODELS_DATABASE: ModelInfo[] = [
     hiddenSize: 8192,
     numLayers: 80,
     numHeads: 64,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwq-vl-72b',
+    name: 'QwQ-VL-72B (推理多模态)',
+    params: 72.0,
+    architecture: 'multimodal',
+    hiddenSize: 8192,
+    numLayers: 80,
+    numHeads: 64,
+    vocabSize: 151936
+  },
+  {
+    id: 'qwen2.5-vl-32b',
+    name: 'Qwen2.5-VL-32B',
+    params: 32.5,
+    architecture: 'multimodal',
+    hiddenSize: 6400,
+    numLayers: 64,
+    numHeads: 50,
     vocabSize: 151936
   },
 
@@ -1124,16 +1495,21 @@ export function getGPUsByPriceRange() {
 /**
  * 根据架构类型过滤模型
  */
-export function getModelsByArchitecture(type: 'nlp' | 'multimodal'): ModelInfo[] {
+export function getModelsByArchitecture(type: 'nlp' | 'multimodal' | 'embedding'): ModelInfo[] {
   if (type === 'nlp') {
     // NLP模型：transformer, glm, moe 架构
     return MODELS_DATABASE.filter(model => 
       ['transformer', 'glm', 'moe'].includes(model.architecture)
     );
-  } else {
+  } else if (type === 'multimodal') {
     // 多模态模型：multimodal 架构
     return MODELS_DATABASE.filter(model => 
       model.architecture === 'multimodal'
+    );
+  } else {
+    // 向量模型：embedding, reranker 架构
+    return MODELS_DATABASE.filter(model => 
+      ['embedding', 'reranker'].includes(model.architecture)
     );
   }
 }

@@ -64,8 +64,9 @@
 - **🛡️ 错误处理**：智能错误提示和恢复
 
 ### 数据支持
-- **50+ 预训练模型**：覆盖主流开源模型，智能分类显示
-- **20+ 多模态模型**：支持Qwen2.5-VL、LLaVA、Whisper、Phi-4-Multimodal等
+- **130+ 预训练模型**：覆盖主流中国和国际开源模型，智能分类显示
+- **22+ 多模态模型**：支持Qwen2.5-VL、QwQ-VL、LLaVA、Whisper等
+- **12+ 向量模型**：支持Qwen3-Embedding、Qwen3-Reranker系列
 - **20+ GPU规格**：从消费级到数据中心级，包含最新RTX 50系列
 - **智能推荐**：根据显存需求推荐合适的GPU
 - **价格分析**：GPU性价比对比
@@ -82,14 +83,20 @@
 
 ## 📚 支持的模型
 
-### 🤖 NLP/语言模型 (50+个)
+### 🤖 NLP/语言模型 (95+个)
 
 #### Qwen系列
 - **Qwen2.5**: 0.5B, 1.5B, 3B, 7B, 14B, 32B, 72B
 - **Qwen3**: 1.8B, 7B, 14B, 32B, 72B
 
 #### DeepSeek系列  
-- **DeepSeek-R1-0528** (70B)
+- **DeepSeek-V3-671B** (满血版MoE，37B激活)
+- **DeepSeek-V3-0324** (最新优化版)
+- **DeepSeek-R1-671B** (满血版推理模型)
+- **DeepSeek-R1-0528** (最新推理模型，685B参数)
+- **deepseek-ai/DeepSeek-R1-0528** (官方Hugging Face版本)
+- **deepseek-ai/DeepSeek-R1-0528-Qwen3-8B** (基于Qwen3的8B推理模型)
+- **DeepSeek-R1系列**: 1.5B, 7B, 8B, 14B, 32B, 70B
 - **DeepSeek-Coder**: 1.3B, 6.7B, 33B
 - **DeepSeek-MoE-16B**
 
@@ -98,20 +105,38 @@
 - **Llama-2**: 7B, 13B, 70B
 
 #### ChatGLM系列
-- **ChatGLM3-6B**, **ChatGLM4-9B**
+- **GLM-4-Plus** (100B，智谱最新大模型)
+- **GLM-Z1-32B** (推理模型，对标OpenAI o1)
+- **GLM-4-9B**, **ChatGLM3-6B**, **ChatGLM4-9B**
 
-#### 其他主流模型
-- **Yi**: 6B, 34B
-- **Baichuan2**: 7B, 13B  
+#### Yi系列（零一万物）
+- **Yi-Lightning** (1000B MoE，50B激活)
+- **Yi-Large** (100B)
+- **Yi-Medium** (200B MoE，20B激活)
+- **Yi-6B**, **Yi-34B**
+
+#### 其他中国开源模型
+- **Qwen3系列**: 1.8B, 7B, 14B, 32B, 72B（阿里最新）
+- **Qwen3-Embedding**: 0.6B, 4B, 8B（向量模型）
+- **Qwen3-Reranker**: 0.6B, 4B, 8B（重排序模型）
+- **MiniMax-ABAB6.5**: 70B, 100B（面壁智能）
+- **Moonshot-v1**: 32K/128K（月之暗面）
+- **Step-1V** (300B多模态), **Step-2** (800B MoE)（阶跃星辰）
+- **InternLM2.5**: 7B, 20B（书生·浦语）
+- **Spark-Max** (340B MoE), **Spark-Pro** (175B)（星火）
+- **Baichuan2**: 7B, 13B
+
+#### 国际主流模型
 - **Mistral-7B**, **Mixtral-8x7B**
 - **Gemma**: 2B, 7B
 - **Phi-3**: Mini(3.8B), Small(7B)
 - **CodeLlama**: 7B, 13B, 34B
 
-### 🎨 多模态模型 (20+个) 🆕
+### 🎨 多模态模型 (22+个) 🆕
 
 #### 视觉语言模型
-- **Qwen2.5-VL系列**: 3B, 7B, 72B
+- **Qwen2.5-VL系列**: 3B, 7B, 32B, 72B
+- **QwQ-VL-72B**: 推理多模态模型，视觉推理能力强
 - **LLaVA系列**: 1.5-7B, 1.5-13B, NeXT-34B
 - **Idefics2-8B**: 高质量视觉理解
 
@@ -126,6 +151,12 @@
 #### 多模态对话模型
 - **Phi-4-Multimodal**: Microsoft最新多模态模型
 - **Nougat-Base**: 文档理解专用
+
+### 🔍 向量模型 (12+个) 🆕
+
+#### Qwen向量模型系列
+- **Qwen3-Embedding**: 0.6B, 4B, 8B（文本向量化）
+- **Qwen3-Reranker**: 0.6B, 4B, 8B（文档重排序）
 
 ### 🎯 模型智能分类
 
@@ -495,7 +526,7 @@ Content-Type: application/json
 - 🔧 **重构计算公式**：基于通用LLM框架，所有公式统一标准
 - 🎯 **优化标签页顺序**：推理→微调→训练→GRPO，符合使用频率
 - 🎨 **模型智能分类**：NLP和多模态模型完全隔离
-- 📈 **扩展模型数据库**：新增20+多模态模型，总计70+模型
+- 📈 **扩展模型数据库**：新增中国开源模型和多模态模型，总计100+模型
 - 🚀 **性能优化**：首次加载优化至178KB
 
 ### v1.0.0 (2024-01-01)

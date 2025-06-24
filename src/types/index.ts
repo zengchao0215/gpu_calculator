@@ -43,11 +43,12 @@ export interface ModelInfo {
   id: string;
   name: string;
   params: number; // billions
-  architecture: string;
+  architecture: string; // transformer, multimodal, moe, glm, embedding, reranker, etc.
   hiddenSize: number;
   numLayers: number;
   numHeads: number;
   vocabSize: number;
+  activeParams?: number; // billions, for MoE models
 }
 
 // 训练配置
