@@ -279,8 +279,8 @@ Total_Sequence_Length = 文本Token + 图像Patch + 音频Patch + 视频Patch
 
 ```bash
 # 克隆仓库
-git clone https://github.com/wuhr-ai/vram-calculator.git
-cd vram-calculator
+git clone https://github.com/st-lzh/vram-wuhrai.git
+cd vram-wuhrai
 
 # 安装依赖
 npm install
