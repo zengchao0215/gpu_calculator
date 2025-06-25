@@ -35,20 +35,20 @@
 - [Future Development Goals](#-future-development-goals)
 - [License](#-license)
 
-## 🖼️ 演示截图
+## 🖼️ Demo Screenshots
 
-### 主界面 - 训练显存计算
-![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v3-01.png)
+### Main Interface - Training VRAM Calculator
+![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-1.png)
 
-*专业的训练显存计算界面，支持模型参数、批次大小、序列长度、精度等配置，实时显示显存需求和GPU推荐*
+*Professional training VRAM calculator interface supporting model parameters, batch size, sequence length, precision configuration, with real-time VRAM requirements display and GPU recommendations*
 
-### 单卡GPU推荐系统
-![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v3-03.png)
+### Single-card GPU Recommendation System
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-02.png)
 
-### 多台多卡GPU推荐系统
-![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v3-02.png)
+### Multi-machine Multi-card GPU Recommendation System
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-03.png)
 
-*智能GPU推荐系统，根据计算需求自动匹配最适合的GPU，包含利用率分析和价格对比*
+*Intelligent GPU recommendation system that automatically matches the most suitable GPUs based on computational requirements, including utilization analysis and price comparison*
 
 ## ✨ Features
 
