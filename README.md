@@ -1,21 +1,10 @@
-Of course, here is the professionally translated English version of your document, tailored for the AI and Large Model developer community. I have focused on using standard industry terminology and ensuring the tone is appropriate for a technical audience.
-
 Wuhr AI VRAM Insight
 <div align="center">
 <h1>🧠 AI VRAM Calculator</h1>
 <p>A Professional VRAM Calculator for Large Language and Multimodal Models</p>
 
 
-![alt text](https://img.shields.io/badge/license-MIT-blue.svg)
-
-
-![alt text](https://img.shields.io/badge/Next.js-15.3-black)
-
-
-![alt text](https://img.shields.io/badge/TypeScript-5.0-blue)
-
-
-![alt text](https://img.shields.io/badge/React-19.0-blue)
+![alt text](https://img.shields.io/badge/license-MIT-blue.svg) ![alt text](https://img.shields.io/badge/Next.js-15.3-black) ![alt text](https://img.shields.io/badge/TypeScript-5.0-blue) ![alt text](https://img.shields.io/badge/React-19.0-blue)
 
 Live Demo | Report an Issue | Feature Request | GitHub | Blog
 
