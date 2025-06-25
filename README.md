@@ -1,408 +1,318 @@
-Wuhr AI VRAM Insight
+# Wuhr AI VRAM Insight
+
 <div align="center">
-<h1>🧠 AI VRAM Calculator</h1>
-<p>A Professional VRAM Calculator for Large Language and Multimodal Models</p>
-
-
-![alt text](https://img.shields.io/badge/license-MIT-blue.svg) ![alt text](https://img.shields.io/badge/Next.js-15.3-black) ![alt text](https://img.shields.io/badge/TypeScript-5.0-blue) ![alt text](https://img.shields.io/badge/React-19.0-blue)
-
-Live Demo | Report an Issue | Feature Request | GitHub | Blog
-
+  <h1>🧠 AI VRAM Calculator</h1>
+  <p>Professional VRAM requirement calculation tool for Large Language Models and Multimodal Models</p>
+  
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  [![Next.js](https://img.shields.io/badge/Next.js-15.3-black)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+  [![React](https://img.shields.io/badge/React-19.0-blue)](https://reactjs.org/)
+  
+  [Live Demo](https://vram.wuhrai.com) | [Report Issues](https://github.com/st-lzh/vram-wuhrai/issues) | [Feature Request](https://github.com/st-lzh/vram-wuhrai/issues) | [GitHub Repository](https://github.com/st-lzh/vram-wuhrai.git) | [Blog](https://wuhrai.com)
 </div>
 
-📖 Language
+---
+
+## 📖 Language / 语言
+
+**English** | [中文](README.zh.md)
+
+---
+
+## 📖 Table of Contents
+
+- [Features](#-features)
+- [Version Highlights](#-version-highlights)
+- [Tech Stack](#-tech-stack)
+- [VRAM Calculation Formulas](#-vram-calculation-formulas)
+- [Supported Models](#-supported-models)
+- [Quick Start](#-quick-start)
+- [Docker Deployment](#-docker-deployment)
+- [Project Structure](#-project-structure)
+- [API Documentation](#-api-documentation)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## 🖼️ Demo Screenshots
+
+### Main Interface - Training VRAM Calculator
+![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-1.png)
+
+*Professional training VRAM calculator interface supporting model parameters, batch size, sequence length, precision configuration, with real-time VRAM requirements display and GPU recommendations*
+
+### Single-card GPU Recommendation System
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-02.png)
+
+### Multi-machine Multi-card GPU Recommendation System
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-03.png)
+
+*Intelligent GPU recommendation system that automatically matches the most suitable GPUs based on computational requirements, including utilization analysis and price comparison*
+
+
+## ✨ Features
+
+### 🆕 Version Highlights
+- **🔥 Multimodal Model Support**: New independent multimodal grouping supporting text+image+audio+video combinations
+- **⚡ GRPO Algorithm Calculation**: Support for Group-wise Ranking Preference Optimization VRAM calculation
+- **📊 Intelligent Tab Ordering**: Inference→Fine-tuning→Training→GRPO, aligned with usage frequency
+- **🎯 Smart Model Classification**: Complete isolation between NLP models and multimodal models
+- **📈 Correct Calculation Formulas**: All calculation formulas rewritten based on unified LLM framework
+
+### Core Features
+- **🎯 Five Calculation Modes**: Inference, Fine-tuning, Training, GRPO, Multimodal
+- **📊 Precise Calculations**: VRAM calculation formulas based on latest engineering practices and unified LLM framework
+- **🎨 Visualization**: Pie charts showing VRAM composition for intuitive understanding of each component's proportion
+- **💾 History Records**: Automatic saving of calculation history with comparison analysis support
+- **🔧 Configuration Presets**: 12+ preset templates for quick calculation start
+- **📱 Responsive Design**: Perfect adaptation for mobile and desktop
+
+### Advanced Features
+- **🌙 Dark Mode**: Eye protection with system theme following
+- **⚡ PWA Support**: Installable as local application with offline usage support
+- **🔗 Result Sharing**: Generate sharing links and export calculation reports
+- **⌨️ Keyboard Shortcuts**: Improve operational efficiency
+- **📈 Performance Monitoring**: Real-time application performance monitoring
+- **🛡️ Error Handling**: Intelligent error prompts and recovery
+
+### Data Support
+- **130+ Pre-trained Models**: Covering mainstream Chinese and international open-source models with intelligent classification
+- **22+ Multimodal Models**: Supporting Qwen2.5-VL, QwQ-VL, LLaVA, Whisper, etc.
+- **12+ Vector Models**: Supporting Qwen3-Embedding, Qwen3-Reranker series
+- **20+ GPU Specifications**: From consumer-grade to data center-grade, including latest RTX 50 series
+- **Smart Recommendations**: Recommend suitable GPUs based on VRAM requirements
+- **Price Analysis**: GPU cost-effectiveness comparison
+
+## 🛠 Tech Stack
+
+- **Framework**: Next.js 15.3 + React 19
+- **Language**: TypeScript 5.0
+- **Styling**: Tailwind CSS + Glassmorphism Design
+- **State Management**: Zustand
+- **Animation**: Framer Motion
+- **Charts**: Recharts
+- **Tools**: ESLint, Prettier, Husky
+
+## 📚 Supported Models
+
+### 🤖 NLP/Language Models (95+ models)
+
+#### Qwen Series
+- **Qwen2.5**: 0.5B, 1.5B, 3B, 7B, 14B, 32B, 72B
+- **Qwen3**: 1.8B, 7B, 14B, 32B, 72B
+
+#### DeepSeek Series  
+- **DeepSeek-V3-671B** (Full MoE, 37B active)
+- **DeepSeek-V3-0324** (Latest optimized version)
+- **DeepSeek-R1-671B** (Full reasoning model)
+- **DeepSeek-R1-0528** (Latest reasoning model, 685B parameters)
+- **deepseek-ai/DeepSeek-R1-0528** (Official Hugging Face version)
+- **deepseek-ai/DeepSeek-R1-0528-Qwen3-8B** (8B reasoning model based on Qwen3)
+- **DeepSeek-R1 Series**: 1.5B, 7B, 8B, 14B, 32B, 70B
+- **DeepSeek-Coder**: 1.3B, 6.7B, 33B
+- **DeepSeek-MoE-16B**
+
+#### Llama Series
+- **Llama-3.1**: 8B, 70B, 405B
+- **Llama-2**: 7B, 13B, 70B
 
-English | 中文
+#### ChatGLM Series
+- **GLM-4-Plus** (100B, Zhipu's latest large model)
+- **GLM-Z1-32B** (Reasoning model, competing with OpenAI o1)
+- **GLM-4-9B**, **ChatGLM3-6B**, **ChatGLM4-9B**
 
-📖 Table of Contents
+#### Yi Series (01.AI)
+- **Yi-Lightning** (1000B MoE, 50B active)
+- **Yi-Large** (100B)
+- **Yi-Medium** (200B MoE, 20B active)
+- **Yi-6B**, **Yi-34B**
 
-Features
+#### Other Chinese Open-Source Models
+- **Qwen3 Series**: 1.8B, 7B, 14B, 32B, 72B (Alibaba's latest)
+- **Qwen3-Embedding**: 0.6B, 4B, 8B (Vector models)
+- **Qwen3-Reranker**: 0.6B, 4B, 8B (Reranking models)
+- **MiniMax-ABAB6.5**: 70B, 100B (MiniMax)
+- **Moonshot-v1**: 32K/128K (Moonshot AI)
+- **Step-1V** (300B multimodal), **Step-2** (800B MoE) (StepFun)
+- **InternLM2.5**: 7B, 20B (InternLM)
+- **Spark-Max** (340B MoE), **Spark-Pro** (175B) (iFLYTEK)
+- **Baichuan2**: 7B, 13B
 
-What's New
+#### International Mainstream Models
+- **Mistral-7B**, **Mixtral-8x7B**
+- **Gemma**: 2B, 7B
+- **Phi-3**: Mini(3.8B), Small(7B)
+- **CodeLlama**: 7B, 13B, 34B
 
-Tech Stack
+### 🎨 Multimodal Models (22+ models) 🆕
 
-VRAM Calculation Formulas
+#### Vision-Language Models
+- **Qwen2.5-VL Series**: 3B, 7B, 32B, 72B
+- **QwQ-VL-72B**: Reasoning multimodal model with strong visual reasoning capabilities
+- **LLaVA Series**: 1.5-7B, 1.5-13B, NeXT-34B
+- **Idefics2-8B**: High-quality visual understanding
 
-Supported Models
+#### Audio Models
+- **Whisper Series**: Large-v3, Medium, Small
+- **OpenOmni-7B**: Multimodal dialogue
 
-Quick Start
+#### Video Understanding Models  
+- **Video-LLaMA-7B**: Video content understanding
+- **Jamba-1.5-Mini**: Document+video understanding
 
-Docker Deployment
+#### Multimodal Dialogue Models
+- **Phi-4-Multimodal**: Microsoft's latest multimodal model
+- **Nougat-Base**: Document understanding specialized
 
-Project Structure
+### 🔍 Vector Models (12+ models) 🆕
 
-API Documentation
+#### Qwen Vector Model Series
+- **Qwen3-Embedding**: 0.6B, 4B, 8B (Text vectorization)
+- **Qwen3-Reranker**: 0.6B, 4B, 8B (Document reranking)
 
-Contributing Guidelines
+### 🎯 Smart Model Classification
 
-License
+- **NLP Grouping**: Only displays text models with `transformer`, `glm`, `moe` architectures
+- **Multimodal Grouping**: Only displays multimodal models with `multimodal` architecture
+- **Complete Isolation**: Avoids model selection confusion, improves user experience
 
-🖼️ Demo Screenshots
-Main Interface - Training VRAM Calculation
+## 📐 VRAM Calculation Formulas
 
-![alt text](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-1.png)
+Precise calculation formulas based on unified LLM framework and latest engineering practices:
 
-A professional interface for training VRAM calculation, supporting configurations for model parameters, batch size, sequence length, precision, and providing real-time VRAM requirements and GPU recommendations.
+### 🔬 Unified LLM Framework
 
-Single-Card GPU Recommendation System
+```
+Total VRAM Usage = Model Weights + Optimizer States + Gradients + Activations + Other Overheads
+```
 
-![alt text](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-02.png)
+All calculators follow this framework, with the key difference being **P_train (trainable parameters)**.
 
-Multi-Node, Multi-GPU Recommendation System
+### 1. Inference VRAM Calculation
 
-![alt text](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-03.png)
-
-Intelligent GPU recommendation system that automatically matches the most suitable GPUs based on computational needs, including utilization analysis and price comparison.
-
-✨ Features
-🆕 What's New
-
-🔥 Multimodal Model Support: Added a dedicated multimodal model group, supporting text, image, audio, and video combinations.
-
-⚡ GRPO Algorithm Calculation: Support for VRAM calculation for Group-wise Ranking Preference Optimization.
-
-📊 Smart Tab Sorting: Inference → Fine-tuning → Training → GRPO, ordered by common usage frequency.
-
-🎯 Intelligent Model Categorization: NLP and Multimodal models are now displayed in separate, isolated groups.
-
-📈 Corrected Calculation Formulas: All formulas have been rewritten based on a general-purpose LLM framework.
-
-Core Features
-
-🎯 Five Calculation Modes: Inference, Fine-tuning, Training, GRPO, and Multimodal.
-
-📊 Accurate Calculation: VRAM calculation formulas based on the latest engineering practices and general-purpose LLM frameworks.
-
-🎨 Visualized Breakdown: Pie chart illustrating VRAM composition for an intuitive understanding of each component's share.
-
-💾 Calculation History: Automatically saves calculation history, enabling comparison and analysis.
-
-🔧 Configuration Presets: 12+ preset templates to quickly start your calculations.
-
-📱 Responsive Design: Seamless experience on both mobile and desktop devices.
-
-Advanced Features
-
-🌙 Dark Mode: Protect your eyes with a theme that follows your system's settings.
-
-⚡ PWA Support: Installable as a native app for offline usage.
-
-🔗 Result Sharing: Generate shareable links and export calculation reports.
-
-⌨️ Keyboard Shortcuts: Boost your productivity with keyboard navigation.
-
-📈 Performance Monitoring: Real-time monitoring of application performance.
-
-🛡️ Robust Error Handling: Smart error messages and recovery mechanisms.
-
-Data Support
-
-130+ Pre-trained Models: Covering major Chinese and international open-source models with intelligent categorization.
-
-22+ Multimodal Models: Including Qwen2.5-VL, QwQ-VL, LLaVA, Whisper, and more.
-
-12+ Embedding Models: Support for Qwen3-Embedding and Qwen3-Reranker series.
-
-20+ GPU Specifications: From consumer-grade to data center-grade, including the latest RTX 50 series.
-
-Intelligent Recommendations: Recommends suitable GPUs based on VRAM requirements.
-
-Price Analysis: Cost-performance comparison for different GPUs.
-
-🛠 Tech Stack
-
-Framework: Next.js 15.3 + React 19
-
-Language: TypeScript 5.0
-
-Styling: Tailwind CSS + Glassmorphism Design
-
-State Management: Zustand
-
-Animation: Framer Motion
-
-Charts: Recharts
-
-Tooling: ESLint, Prettier, Husky
-
-📚 Supported Models
-🤖 NLP/Language Models (95+)
-Qwen Series
-
-Qwen2.5: 0.5B, 1.5B, 3B, 7B, 14B, 32B, 72B
-
-Qwen3: 1.8B, 7B, 14B, 32B, 72B
-
-DeepSeek Series
-
-DeepSeek-V3-671B (Full MoE, 37B activated)
-
-DeepSeek-V3-0324 (Latest optimized version)
-
-DeepSeek-R1-671B (Full inference model)
-
-DeepSeek-R1-0528 (Latest inference model, 685B params)
-
-deepseek-ai/DeepSeek-R1-0528 (Official Hugging Face version)
-
-deepseek-ai/DeepSeek-R1-0528-Qwen3-8B (8B inference model based on Qwen3)
-
-DeepSeek-R1 Series: 1.5B, 7B, 8B, 14B, 32B, 70B
-
-DeepSeek-Coder: 1.3B, 6.7B, 33B
-
-DeepSeek-MoE-16B
-
-Llama Series
-
-Llama-3.1: 8B, 70B, 405B
-
-Llama-2: 7B, 13B, 70B
-
-ChatGLM Series
-
-GLM-4-Plus (100B, Zhipu's latest LLM)
-
-GLM-Z1-32B (Inference model, comparable to OpenAI o1)
-
-GLM-4-9B, ChatGLM3-6B, ChatGLM4-9B
-
-Yi Series (01.AI)
-
-Yi-Lightning (1000B MoE, 50B activated)
-
-Yi-Large (100B)
-
-Yi-Medium (200B MoE, 20B activated)
-
-Yi-6B, Yi-34B
-
-Other Chinese Open-Source Models
-
-Qwen3 Series: 1.8B, 7B, 14B, 32B, 72B (Alibaba's latest)
-
-Qwen3-Embedding: 0.6B, 4B, 8B (Embedding models)
-
-Qwen3-Reranker: 0.6B, 4B, 8B (Reranker models)
-
-MiniMax-ABAB6.5: 70B, 100B (Mianbi Intelligence)
-
-Moonshot-v1: 32K/128K (Moonshot AI)
-
-Step-1V (300B Multimodal), Step-2 (800B MoE) (Step-Star)
-
-InternLM2.5: 7B, 20B (SenseTime)
-
-Spark-Max (340B MoE), Spark-Pro (175B) (iFLYTEK)
-
-Baichuan2: 7B, 13B
-
-International Mainstream Models
-
-Mistral-7B, Mixtral-8x7B
-
-Gemma: 2B, 7B
-
-Phi-3: Mini(3.8B), Small(7B)
-
-CodeLlama: 7B, 13B, 34B
-
-🎨 Multimodal Models (22+) 🆕
-Vision-Language Models
-
-Qwen2.5-VL Series: 3B, 7B, 32B, 72B
-
-QwQ-VL-72B: Multimodal inference model with strong visual reasoning capabilities
-
-LLaVA Series: 1.5-7B, 1.5-13B, NeXT-34B
-
-Idefics2-8B: High-quality visual understanding
-
-Audio Models
-
-Whisper Series: Large-v3, Medium, Small
-
-OpenOmni-7B: Multimodal dialogue
-
-Video Understanding Models
-
-Video-LLaMA-7B: Video content understanding
-
-Jamba-1.5-Mini: Document and video understanding
-
-Multimodal Dialogue Models
-
-Phi-4-Multimodal: Microsoft's latest multimodal model
-
-Nougat-Base: Specialized for document understanding
-
-🔍 Embedding Models (12+) 🆕
-Qwen Embedding Model Series
-
-Qwen3-Embedding: 0.6B, 4B, 8B (Text embedding)
-
-Qwen3-Reranker: 0.6B, 4B, 8B (Document reranking)
-
-🎯 Intelligent Model Categorization
-
-NLP Group: Displays only text-based models with transformer, glm, or moe architectures.
-
-Multimodal Group: Displays only multimodal models with multimodal architecture.
-
-Complete Separation: Avoids confusion in model selection and enhances user experience.
-
-📐 VRAM Calculation Formulas
-
-Accurate calculation formulas based on general-purpose LLM frameworks and the latest engineering practices:
-
-🔬 General LLM Framework
-Generated code
-Total VRAM = Model Weights + Optimizer States + Gradients + Activations + Other Overhead
-
-
-All calculators adhere to this framework, with the key difference being the value of P_train (Number of Trainable Parameters).
-
-1. Inference VRAM Calculation
-Generated code
+```
 Total VRAM = Quantized Model Weights + KV Cache + Activations (minimal)
 
 Where:
-- Quantized Model Weights = P_total × bytes_per_parameter × quantization_ratio
-- KV Cache = batch_size × seq_len × hidden_size × num_layers × 2 × bytes_per_parameter
-- Activations = ~10% of training activations (much smaller during inference)
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-2. Fine-tuning VRAM Calculation
-Full Fine-tuning
-Generated code
-P_train = P_total (gradients are required for all parameters)
-Total VRAM = Model Weights + (P_train × optimizer_factor) + (P_train × gradient_precision_bytes) + Activations
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-PEFT Methods (LoRA/QLoRA/Prefix-Tuning)
-Generated code
-P_train << P_total (gradients are required for only a small subset of parameters)
+- Quantized Model Weights = P_total × precision_bytes × quantization_ratio
+- KV Cache = batch_size × seq_len × hidden_size × layers × 2 × precision_bytes
+- Activations = 10% of training activations (smaller during inference)
+```
 
-LoRA: P_train = calculateLoRAParams(rank), typically ~1% of total parameters
-QLoRA: Base model is quantized + LoRA parameters
-Prefix-Tuning: P_train ≈ 1% × P_total
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-3. Training VRAM Calculation
-Generated code
-P_train = P_total (Full parameter training)
-Total VRAM = Model Weights + Optimizer States + Gradients + Activations + Other Overhead
+### 2. Fine-tuning VRAM Calculation
+
+#### Full Fine-tuning
+```
+P_train = P_total (all parameters require gradients)
+Total VRAM = Model Weights + (P_train × optimizer_factor) + (P_train × gradient_precision) + Activations
+```
+
+#### PEFT Methods (LoRA/QLoRA/Prefix)
+```
+P_train << P_total (only few parameters require gradients)
+
+LoRA: P_train = calculateLoRAParams(rank), approximately 1% of total parameters
+QLoRA: Base model quantization + LoRA parameters
+Prefix: P_train = 1% × P_total
+```
+
+### 3. Training VRAM Calculation
+
+```
+P_train = P_total (full training)
+Total VRAM = Model Weights + Optimizer States + Gradients + Activations + Other Overheads
 
 Where:
-- Optimizer States = P_total × 4 bytes × optimizer_factor (SGD=1, AdamW=2)
+- Optimizer States = P_total × 4bytes × optimizer_factor (SGD=1, AdamW=2)
 - Gradients = P_total × training_precision_bytes
-- Activations: Supports Gradient Checkpointing (reduces memory by ~70%)
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-4. GRPO VRAM Calculation 🆕
+- Activations support gradient checkpointing (70% reduction)
+```
 
-Key Characteristic: Activations = k × SFT Activations, where k is the preference group size.
+### 4. GRPO VRAM Calculation 🆕
 
-Generated code
+**Core Feature: Activations = k × SFT Activations**, where k is the preference group size
+
+```
 GRPO Activations = k × SFT Activations
 Where k = numGenerations (preference group size)
 
 Comparison:
 - SFT: Activations = 1 × base
-- DPO: Activations ≈ 2 × base
+- DPO: Activations ≈ 2 × base  
 - GRPO(k=4): Activations = 4 × base
 - GRPO(k=8): Activations = 8 × base
 
-Typically used with PEFT methods:
+Typically uses PEFT methods:
 - Model Weights: INT4 quantization (8x compression)
-- P_train = 1% × P_total (LoRA, etc.)
-- VRAM Bottleneck: The Activations component
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-5. Multimodal VRAM Calculation 🆕
+- P_train = 1% × P_total (LoRA etc.)
+- VRAM Bottleneck: Activations component
+```
 
-Core Concept: Total_Sequence_Length determines Activation memory.
+### 5. Multimodal VRAM Calculation 🆕
 
-Generated code
+**Core: Total_Sequence_Length determines activation VRAM**
+
+```
 Total_Sequence_Length = Text Tokens + Image Patches + Audio Patches + Video Patches
 
 Where:
-- Image Sequence Length = (Resolution / patch_size)² × num_images
-- Video Sequence Length = num_frames × patches_per_frame (the primary cause of sequence length explosion)
+- Image Sequence Length = (resolution/patch_size)² × number_of_images
+- Video Sequence Length = frames × patches_per_frame (source of sequence length explosion)
 - Audio Sequence Length = duration(ms) / 80ms
 
-Activation Memory = batch_size × Total_Sequence_Length × hidden_size × num_layers × bytes_per_parameter
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-Precision to Bytes Mapping
-Precision Type	Bytes	Description
-FP32	4	Single-precision floating-point
-FP16/BF16	2	Half-precision floating-point
-INT8	1	8-bit integer quantization (4x compression)
-INT4	0.5	4-bit integer quantization (8x compression)
-Quantization Ratio Mapping
-Quantization Type	Compression Ratio	VRAM Savings
-None	1.0	0%
-INT8	0.25	75%
-INT4	0.125	87.5%
-🚀 Quick Start
-Prerequisites
+Activation VRAM = batch_size × Total_Sequence_Length × hidden_size × layers × precision_bytes
+```
 
-Node.js 18+
+#### Precision Bytes Reference Table
+| Precision Type | Bytes | Description |
+|----------------|-------|-------------|
+| FP32 | 4 | Single precision float |
+| FP16/BF16 | 2 | Half precision float |
+| INT8 | 1 | 8-bit integer quantization (4x compression) |
+| INT4 | 0.5 | 4-bit integer quantization (8x compression) |
 
-npm or yarn
+#### Quantization Ratio Reference Table
+| Quantization Type | Compression Ratio | VRAM Savings |
+|-------------------|-------------------|--------------|
+| None | 1.0 | 0% |
+| INT8 | 0.25 | 75% |
+| INT4 | 0.125 | 87.5% |
 
-Installation
-Generated bash
-# Clone the repository
+## 🚀 Quick Start
+
+### Requirements
+- Node.js 18+
+- npm or yarn
+
+### Installation Steps
+
+```bash
+# Clone repository
 git clone https://github.com/st-lzh/vram-wuhrai.git
 cd vram-wuhrai
 
 # Install dependencies
 npm install
 
-# Start the development server
+# Start development server
 npm run dev
 
-# Build for production
+# Build production version
 npm run build
 
-# Start the production server
+# Start production server
 npm start
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+```
 
-Access the application at http://localhost:3000
+Visit http://localhost:3000 to view the application
 
-🐳 Docker Deployment
-Using Docker Compose (Recommended)
+## 🐳 Docker Deployment
 
-Create docker-compose.yml:
+### Using Docker Compose (Recommended)
 
-Generated yaml
+1. Create `docker-compose.yml`:
+
+```yaml
 version: '3.8'
 
 services:
@@ -432,16 +342,11 @@ services:
     depends_on:
       - app
     restart: unless-stopped
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Yaml
-IGNORE_WHEN_COPYING_END
+```
 
-Start the services:
+2. Start services:
 
-Generated bash
+```bash
 # Start all services
 docker-compose up -d
 
@@ -450,42 +355,33 @@ docker-compose logs -f
 
 # Stop services
 docker-compose down
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
-Using Docker Build
-Generated bash
-# Build the image
+```
+
+### Using Docker Build
+
+```bash
+# Build image
 docker build -t vram-calculator .
 
-# Run the container
+# Run container
 docker run -d \
   --name vram-calculator \
   -p 3000:3000 \
   -e NODE_ENV=production \
   --restart unless-stopped \
   vram-calculator
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
-Performance Optimizations
+```
 
-Initial Load: 178KB (highly optimized)
+### Performance Optimization Configuration
 
-Code Splitting: All calculator components are lazy-loaded.
+- **First Load**: 178KB (Ultimate optimization)
+- **Code Splitting**: Lazy loading all calculator components
+- **PWA Cache**: Offline available
+- **Web Worker**: Background computation without blocking UI
 
-PWA Caching: Available for offline use.
+### Kubernetes Deployment
 
-Web Workers: Background computations to keep the UI responsive.
-
-Kubernetes Deployment
-Generated yaml
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -527,79 +423,66 @@ spec:
   - port: 80
     targetPort: 3000
   type: LoadBalancer
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Yaml
-IGNORE_WHEN_COPYING_END
-📁 Project Structure
-Generated code
+```
+
+## 📁 Project Structure
+
+```
 ai-memory-calculator/
 ├── src/
 │   ├── app/                    # Next.js App Router
-│   │   ├── layout.tsx         # Root Layout
-│   │   ├── page.tsx           # Main Page (Nested Tab Layout)
-│   │   └── api/               # API Routes
-│   ├── components/            # React Components
-│   │   ├── calculators/       # Calculator Components
-│   │   │   ├── inference-calculator.tsx      # Inference Calculator
-│   │   │   ├── fine-tuning-calculator.tsx    # Fine-tuning Calculator  
-│   │   │   ├── training-calculator.tsx       # Training Calculator
-│   │   │   ├── grpo-calculator.tsx          # GRPO Calculator
-│   │   │   └── multimodal-calculator.tsx    # Multimodal Calculator
-│   │   ├── ui/               # UI Components (Shadcn/UI, etc.)
+│   │   ├── layout.tsx         # Root layout
+│   │   ├── page.tsx           # Main page (secondary tab layout)
+│   │   └── api/               # API routes
+│   ├── components/            # React components
+│   │   ├── calculators/       # Calculator components
+│   │   │   ├── inference-calculator.tsx      # Inference calculator
+│   │   │   ├── fine-tuning-calculator.tsx    # Fine-tuning calculator  
+│   │   │   ├── training-calculator.tsx       # Training calculator
+│   │   │   ├── grpo-calculator.tsx          # GRPO calculator
+│   │   │   └── multimodal-calculator.tsx    # Multimodal calculator
+│   │   ├── ui/               # UI components
 │   │   └── ...
 │   ├── hooks/                # Custom Hooks
-│   ├── lib/                  # Library code
-│   │   └── models-data.ts    # 130+ Model database w/ architecture classification
-│   ├── store/                # Zustand State Management
-│   ├── types/                # TypeScript Types
-│   └── utils/                # Utility Functions
-│       └── memory-formulas.ts # General LLM framework calculation formulas
-├── public/                   # Static Assets
+│   ├── lib/                  # Utility libraries
+│   │   └── models-data.ts    # 70+ model database + architecture classification
+│   ├── store/                # Zustand state management
+│   ├── types/                # TypeScript types
+│   └── utils/                # Utility functions
+│       └── memory-formulas.ts # Unified LLM framework calculation formulas
+├── public/                   # Static assets
 │   ├── workers/             # Web Workers
 │   └── ...
-├── docs/                     # Detailed Documentation
-│   ├── memory-calculation-formulas.md # In-depth formula explanations
-│   └── deployment.md       # Deployment Guide
-├── docker-compose.yml        # Docker Compose file
-├── Dockerfile                # Dockerfile
-├── next.config.ts          # Next.js Configuration
-└── package.json            # Project Configuration
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-📚 API Documentation
-Health Check
-Generated http
+├── docs/                    # Detailed documentation
+│   ├── memory-calculation-formulas.md # Calculation formula details
+│   └── deployment.md       # Deployment guide
+├── docker-compose.yml       # Docker orchestration
+├── Dockerfile              # Docker image
+├── next.config.ts         # Next.js configuration
+└── package.json          # Project configuration
+```
+
+## 📚 API Documentation
+
+### Health Check
+
+```http
 GET /api/health
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Http
-IGNORE_WHEN_COPYING_END
+```
 
 Response:
-
-Generated json
+```json
 {
   "status": "ok",
   "timestamp": "2024-01-01T00:00:00.000Z",
   "version": "1.0.0",
   "uptime": 3600
 }
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Json
-IGNORE_WHEN_COPYING_END
-Performance Analytics
-Generated http
+```
+
+### Performance Analytics
+
+```http
 POST /api/analytics
 Content-Type: application/json
 
@@ -609,278 +492,190 @@ Content-Type: application/json
   "duration": 150,
   "timestamp": "2024-01-01T00:00:00.000Z"
 }
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Http
-IGNORE_WHEN_COPYING_END
-🤝 Contributing Guidelines
+```
+
+## 🤝 Contributing
+
+We welcome all forms of contributions!
+
+### How to Contribute
+
+1. Fork this repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+### Development Standards
+
+- Follow TypeScript and React best practices
+- Use ESLint and Prettier to maintain consistent code style
+- Write clear commit messages
+- Add tests for new features
+- Update relevant documentation
+
+### Calculation Formula Contributions
+
+If you find calculation formula issues or want to add new algorithm support:
+1. Describe the problem or requirement in Issues
+2. Provide relevant papers or technical documentation
+3. Provide reference implementation if possible
+
+### Report Issues
+
+Use GitHub Issues to report problems, please include:
+- Problem description
+- Reproduction steps
+- Expected behavior
+- Screenshots (if applicable)
+- Environment information
+
+## 🏆 Future Development Goals
+
+### Short-term Goals (2025 Q1-Q2)
+
+#### 🔧 Technical Enhancement
+- **Model Support Expansion**
+  - Add 50+ latest LLM support (GPT-4o, Claude-3.5, Gemini-2.0)
+  - Support new Chinese models (Kimi-k1, Doubao-pro, etc.)
+  - Integrate latest multimodal models (GPT-4V, Gemini-Vision)
+
+- **Calculation Precision Improvement**
+  - Implement distributed training VRAM calculation (multi-node, multi-GPU)
+  - Add memory optimization algorithms (gradient accumulation, mixed precision)
+  - Support new training paradigms (MoE training, sparse training)
+
+- **Performance Optimization**
+  - Reduce first load time to under 100KB
+  - Implement advanced caching strategies
+  - Add calculation result prediction cache
+
+#### 🎨 User Experience Enhancement
+- **Interactive Features**
+  - Real-time calculation result comparison
+  - VRAM usage timeline visualization
+  - Interactive GPU selection wizard
+
+- **Advanced Analytics**
+  - Cost analysis calculator (GPU rental costs)
+  - Training time estimation
+  - Power consumption calculation
+
+### Medium-term Goals (2025 Q3-Q4)
+
+#### 🚀 Platform Integration
+- **API Services**
+  - RESTful API for third-party integration
+  - Developer CLI tools
+  - GitHub Action integration for CI/CD
 
-We welcome all forms of contribution!
+- **Enterprise Features**
+  - Multi-user workspace support
+  - Calculation result export (PDF, Excel)
+  - Custom model database management
+
+#### 🌍 Community Building
+- **Internationalization**
+  - Support for 10+ languages
+  - Regional model databases (Japan, Europe, etc.)
+  - UI/UX cultural adaptation
+
+- **Documentation & Education**
+  - Interactive tutorials for beginners
+  - Video course series
+  - Technical blog articles
+
+### Long-term Vision (2026+)
+
+#### 🔬 Research & Innovation
+- **AI-Driven Features**
+  - Intelligent model recommendation based on task requirements
+  - Automatic optimization suggestions
+  - Machine learning predictive VRAM analysis
+
+- **Advanced Computing Support**
+  - Quantum computing VRAM estimation
+  - Edge device deployment calculation
+  - Federated learning resource estimation
 
-How to Contribute
+#### 🌐 Ecosystem Development
+- **Platform Ecosystem**
+  - Custom calculator plugin system
+  - Major cloud platform integration (AWS, Azure, GCP)
+  - Mobile application development (iOS, Android)
 
-Fork the repository
+- **Research Collaboration**
+  - Academic institution partnerships
+  - VRAM research open datasets
+  - VRAM calculation methodology standardization
 
-Create your feature branch (git checkout -b feature/AmazingFeature)
+### 📈 Metrics & Goals
 
-Commit your changes (git commit -m 'Add some AmazingFeature')
+#### Performance Goals
+- **Load Time**: <100KB first load by Q2 2025
+- **Accuracy**: 95%+ calculation accuracy for mainstream models
+- **Coverage**: Support 200+ models by end of 2025
 
-Push to the branch (git push origin feature/AmazingFeature)
+#### Community Goals
+- **Users**: 10,000+ monthly active users by end of 2025
+- **Contributors**: 50+ open-source contributors
+- **Documentation**: 100+ technical articles and tutorials
 
-Open a Pull Request
+#### Technical Debt & Maintenance
+- **Code Quality**: Maintain 95%+ test coverage
+- **Security**: Regular security audits and updates
+- **Dependencies**: Keep all dependencies up-to-date
+- **Compatibility**: Support latest web standards and frameworks
 
-Development Standards
+### 🤝 How to Participate
 
-Follow TypeScript and React best practices.
+We welcome contributions in various areas:
 
-Use ESLint and Prettier to maintain consistent code style.
+1. **Development**: Contribute core features and bug fixes
+2. **Documentation**: Help improve and translate documentation
+3. **Research**: Contribute to calculation formula accuracy
+4. **Community**: Help answer questions and support users
+5. **Testing**: Help identify and report issues
 
-Write clear and concise commit messages.
+Join our [GitHub Discussions](https://github.com/st-lzh/vram-wuhrai/discussions) to participate in feature planning and technical discussions.
 
-Add tests for new features.
+## 🏆 Changelog
 
-Update relevant documentation.
+### v2.0.0 (2024-06-23) 🎉
+- ✨ **Added Multimodal Model Support**: Independent grouping supporting text+image+audio+video
+- ✨ **Added GRPO Algorithm Calculation**: Correctly reflects k-fold activation value effect of preference group size
+- 🔧 **Refactored Calculation Formulas**: Based on unified LLM framework, all formulas unified to standard
+- 🎯 **Optimized Tab Order**: Inference→Fine-tuning→Training→GRPO, aligned with usage frequency
+- 🎨 **Smart Model Classification**: Complete isolation between NLP and multimodal models
+- 📈 **Expanded Model Database**: Added Chinese open-source models and multimodal models, total 100+ models
+- 🚀 **Performance Optimization**: First load optimized to 178KB
 
-Formula Contributions
+### v1.0.0 (2024-01-01)
+- 🎉 Initial release
+- Support for training, inference, fine-tuning modes
+- 50+ NLP model support
+- GPU recommendation system
 
-If you find an issue with a calculation formula or want to add support for a new algorithm:
+## 📄 License
 
-Open an issue describing the problem or proposal.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-Provide links to relevant papers or technical documentation.
+## 🙏 Acknowledgments
 
-If possible, provide a reference implementation.
+- Thanks to all contributors
+- VRAM calculation formulas based on community best practices
+- Uses excellent open-source projects: Next.js, React, Tailwind CSS, etc.
 
-Reporting Issues
+## 📞 Contact Us
 
-Please use GitHub Issues to report bugs. Include:
+- Blog: [https://wuhrai.com](https://wuhrai.com)
+- Model API: [https://ai.wuhrai.com](https://ai.wuhrai.com)
+- Model Chat: [https://gpt.wuhrai.com](https://gpt.wuhrai.com)
+- Email: 1139804291@qq.com
+- GitHub: [@wuhr-ai](https://github.com/wuhr-ai)
 
-A clear description of the issue.
-
-Steps to reproduce.
-
-Expected behavior.
-
-Screenshots (if applicable).
-
-Environment details.
-
-🏆 Roadmap
-Short-term Goals (Q1-Q2 2025)
-🔧 Technical Enhancements
-
-Expanded Model Support
-
-Add 50+ new LLMs (e.g., GPT-4o, Claude-3.5, Gemini-2.0).
-
-Support new Chinese models (e.g., Kimi-k1, Doubao-pro).
-
-Integrate latest multimodal models (e.g., GPT-4V, Gemini-Vision).
-
-Improved Calculation Accuracy
-
-Implement distributed training VRAM calculation (multi-node, multi-GPU).
-
-Add memory optimization techniques (gradient accumulation, mixed precision).
-
-Support new training paradigms (MoE training, sparse training).
-
-Performance Optimization
-
-Reduce initial load time to under 100KB.
-
-Implement advanced caching strategies.
-
-Add predictive caching for calculation results.
-
-🎨 User Experience Enhancements
-
-Interactive Features
-
-Real-time comparison of calculation results.
-
-VRAM usage timeline visualization.
-
-Interactive GPU selection wizard.
-
-Advanced Analysis
-
-Cost analysis calculator (GPU rental costs).
-
-Training time estimation.
-
-Power consumption calculation.
-
-Mid-term Goals (Q3-Q4 2025)
-🚀 Platform Integration
-
-API Services
-
-RESTful API for third-party integration.
-
-Developer CLI tool.
-
-GitHub Action for CI/CD integration.
-
-Enterprise Features
-
-Multi-user workspace support.
-
-Export calculation results (PDF, Excel).
-
-Custom model database management.
-
-🌍 Community Building
-
-Internationalization
-
-Support for 10+ languages.
-
-Regional model databases (Japan, Europe, etc.).
-
-UI/UX cultural adaptation.
-
-Documentation & Education
-
-Interactive tutorials for beginners.
-
-Video course series.
-
-Technical blog posts.
-
-Long-term Vision (2026+)
-🔬 Research & Innovation
-
-AI-Driven Features
-
-Intelligent model recommendations based on task requirements.
-
-Automated optimization suggestions.
-
-Machine learning-based predictive VRAM analysis.
-
-Advanced Computing Support
-
-Quantum computing VRAM estimation.
-
-Edge device deployment calculation.
-
-Federated learning resource estimation.
-
-🌐 Ecosystem Development
-
-Platform Ecosystem
-
-Custom calculator plugin system.
-
-Integration with major cloud platforms (AWS, Azure, GCP).
-
-Mobile app development (iOS, Android).
-
-Research Collaboration
-
-Partnerships with academic institutions.
-
-Open datasets for VRAM research.
-
-Standardization of VRAM calculation methodologies.
-
-📈 Metrics & Targets
-Performance Targets
-
-Load Time: <100KB initial load by Q2 2025.
-
-Accuracy: 95%+ calculation accuracy for mainstream models.
-
-Coverage: Support for 200+ models by end of 2025.
-
-Community Targets
-
-Users: 10,000+ monthly active users by end of 2025.
-
-Contributors: 50+ open-source contributors.
-
-Documentation: 100+ technical articles and tutorials.
-
-Technical Debt & Maintenance
-
-Code Quality: Maintain 95%+ test coverage.
-
-Security: Regular security audits and updates.
-
-Dependencies: Keep all dependencies up-to-date.
-
-Compatibility: Support the latest web standards and frameworks.
-
-🤝 How to Get Involved
-
-We welcome contributions in all areas:
-
-Development: Contribute to core features and bug fixes.
-
-Documentation: Help improve and translate documentation.
-
-Research: Contribute to the accuracy of calculation formulas.
-
-Community: Help answer questions and support users.
-
-Testing: Help identify and report issues.
-
-Join our GitHub Discussions to participate in feature planning and technical discussions.
-
-🏆 Changelog
-v2.0.0 (2024-06-23) 🎉
-
-✨ New Feature: Multimodal Model Support: Dedicated group for models handling text, image, audio, and video.
-
-✨ New Feature: GRPO Algorithm Calculation: Accurately reflects the k-factor activation memory impact from preference group size.
-
-🔧 Refactor: Calculation Formulas: All formulas standardized based on a general-purpose LLM framework.
-
-🎯 Optimization: Tab Order: Reordered to Inference → Fine-tuning → Training → GRPO for better workflow.
-
-🎨 Feature: Intelligent Model Categorization: NLP and multimodal models are now completely separated.
-
-📈 Expansion: Model Database: Added new Chinese open-source and multimodal models, totaling over 100.
-
-🚀 Optimization: Performance: Initial page load optimized to 178KB.
-
-v1.0.0 (2024-01-01)
-
-🎉 Initial release.
-
-Support for Training, Inference, and Fine-tuning modes.
-
-50+ NLP models supported.
-
-GPU recommendation system.
-
-📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-🙏 Acknowledgements
-
-Thanks to all contributors.
-
-VRAM calculation formulas are based on community best practices.
-
-Built with amazing open-source projects like Next.js, React, and Tailwind CSS.
-
-📞 Contact Us
-
-Blog: https://wuhrai.com
-
-Model API: https://ai.wuhrai.com
-
-Model Chat: https://gpt.wuhrai.com
-
-Email: 1139804291@qq.com
-
-GitHub: @wuhr-ai
+---
 
 <div align="center">
-Made with ❤️ by the Wuhr AI Team
+  Made with ❤️ by Wuhr AI Team
 </div>
