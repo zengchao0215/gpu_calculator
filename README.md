@@ -37,15 +37,15 @@
 ## 🖼️ Demo Screenshots
 
 ### Main Interface - Training VRAM Calculator
-![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v3-01.png)
+![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v3-01.png)
 
 *Professional training VRAM calculator interface supporting model parameters, batch size, sequence length, precision configuration, with real-time VRAM requirements display and GPU recommendations*
 
 ### Single-card GPU Recommendation System
-![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v3-03.png)
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v3-03.png)
 
 ### Multi-machine Multi-card GPU Recommendation System
-![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v3-02.png)
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v3-02.png)
 
 *Intelligent GPU recommendation system that automatically matches the most suitable GPUs based on computational requirements, including utilization analysis and price comparison*
 
