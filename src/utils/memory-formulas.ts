@@ -10,6 +10,45 @@ import {
   MemoryBreakdown 
 } from '@/types';
 
+// 翻译工具函数 - 根据当前语言获取标签
+function getLabel(key: string): string {
+  // 从 localStorage 获取当前语言，支持实时更新
+  const language = typeof window !== 'undefined' ? localStorage.getItem('language') || 'zh' : 'zh';
+  
+  const translations: Record<string, Record<string, string>> = {
+    zh: {
+      'model.weights': '模型权重',
+      'model.params': '模型参数',
+      'optimizer.states': '优化器状态',
+      'gradients': '梯度',
+      'activations': '激活值',
+      'activations.k.times': '激活值 (k={k}倍)',
+      'kv.cache': 'KV缓存',
+      'other.overheads': '其他开销',
+      'text.tokens': '文本Token',
+      'image.patches': '图像Patch',
+      'audio.patches': '音频Patch',
+      'video.patches': '视频Patch'
+    },
+    en: {
+      'model.weights': 'Model Weights',
+      'model.params': 'Model Parameters',
+      'optimizer.states': 'Optimizer States',
+      'gradients': 'Gradients',
+      'activations': 'Activations',
+      'activations.k.times': 'Activations (k={k}x)',
+      'kv.cache': 'KV Cache',
+      'other.overheads': 'Other Overheads',
+      'text.tokens': 'Text Tokens',
+      'image.patches': 'Image Patches',
+      'audio.patches': 'Audio Patches',
+      'video.patches': 'Video Patches'
+    }
+  };
+  
+  return translations[language]?.[key] || translations['zh'][key] || key;
+}
+
 /**
  * 获取精度对应的字节数
  */
@@ -143,11 +182,11 @@ export function calculateTrainingMemory(config: TrainingConfig): MemoryBreakdown
     kvCache: 0, // 训练时通常不缓存KV
     total,
     breakdown: [
-      { label: '模型权重', value: modelWeightsGB, percentage: (modelWeightsGB / total) * 100, color: '#3B82F6' },
-      { label: '优化器状态', value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' },
-      { label: '梯度', value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' },
-      { label: '激活值', value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' },
-      { label: '其他开销', value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' },
+      { label: getLabel('model.weights'), value: modelWeightsGB, percentage: (modelWeightsGB / total) * 100, color: '#3B82F6' },
+      { label: getLabel('optimizer.states'), value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' },
+      { label: getLabel('gradients'), value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' },
+      { label: getLabel('activations'), value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' },
+      { label: getLabel('other.overheads'), value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' },
     ]
   };
 }
@@ -186,9 +225,9 @@ export function calculateInferenceMemory(config: InferenceConfig, modelInfo?: { 
     kvCache: kvCacheGB,
     total,
     breakdown: [
-      { label: '模型参数', value: modelParamsGB, percentage: (modelParamsGB / total) * 100, color: '#3B82F6' },
-      { label: 'KV缓存', value: kvCacheGB, percentage: (kvCacheGB / total) * 100, color: '#8B5CF6' },
-      { label: '激活值', value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' },
+      { label: getLabel('model.params'), value: modelParamsGB, percentage: (modelParamsGB / total) * 100, color: '#3B82F6' },
+      { label: getLabel('kv.cache'), value: kvCacheGB, percentage: (kvCacheGB / total) * 100, color: '#8B5CF6' },
+      { label: getLabel('activations'), value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' },
     ]
   };
 }
@@ -267,11 +306,11 @@ export function calculateFineTuningMemory(config: FineTuningConfig, modelInfo?: 
     kvCache: 0,
     total,
     breakdown: [
-      { label: '模型权重', value: modelWeightsGB, percentage: (modelWeightsGB / total) * 100, color: '#3B82F6' },
-      { label: '优化器状态', value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' },
-      { label: '梯度', value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' },
-      { label: '激活值', value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' },
-      { label: '其他开销', value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' },
+      { label: getLabel('model.weights'), value: modelWeightsGB, percentage: (modelWeightsGB / total) * 100, color: '#3B82F6' },
+      { label: getLabel('optimizer.states'), value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' },
+      { label: getLabel('gradients'), value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' },
+      { label: getLabel('activations'), value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' },
+      { label: getLabel('other.overheads'), value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' },
     ],
     // 附加信息
     metadata: {
@@ -354,11 +393,11 @@ export function calculateGRPOMemory(config: GRPOConfig, modelInfo?: { params?: n
     kvCache: 0, // GRPO训练时通常不使用KV缓存
     total,
     breakdown: [
-      { label: '模型权重', value: modelWeightsGB, percentage: (modelWeightsGB / total) * 100, color: '#3B82F6' },
-      { label: '激活值 (k=' + k + '倍)', value: grpoActivationsGB, percentage: (grpoActivationsGB / total) * 100, color: '#EF4444' },
-      { label: '优化器状态', value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' },
-      { label: '梯度', value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' },
-      { label: '其他开销', value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' },
+      { label: getLabel('model.weights'), value: modelWeightsGB, percentage: (modelWeightsGB / total) * 100, color: '#3B82F6' },
+      { label: getLabel('activations.k.times').replace('{k}', k.toString()), value: grpoActivationsGB, percentage: (grpoActivationsGB / total) * 100, color: '#EF4444' },
+      { label: getLabel('optimizer.states'), value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' },
+      { label: getLabel('gradients'), value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' },
+      { label: getLabel('other.overheads'), value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' },
     ],
     // 附加信息：GRPO特有的参数
     metadata: {
@@ -452,33 +491,33 @@ export function calculateMultimodalMemory(config: MultimodalConfig, modelInfo?: 
   
   // 构建breakdown数组
   const breakdown = [
-    { label: '模型参数', value: modelParamsGB, percentage: (modelParamsGB / total) * 100, color: '#3B82F6' }
+    { label: getLabel('model.params'), value: modelParamsGB, percentage: (modelParamsGB / total) * 100, color: '#3B82F6' }
   ];
   
   if (optimizerGB > 0) {
-    breakdown.push({ label: '优化器状态', value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' });
+    breakdown.push({ label: getLabel('optimizer.states'), value: optimizerGB, percentage: (optimizerGB / total) * 100, color: '#F59E0B' });
   }
   
   if (gradientsGB > 0) {
-    breakdown.push({ label: '梯度', value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' });
+    breakdown.push({ label: getLabel('gradients'), value: gradientsGB, percentage: (gradientsGB / total) * 100, color: '#10B981' });
   }
   
-  breakdown.push({ label: '激活值', value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' });
-  breakdown.push({ label: '其他开销', value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' });
+  breakdown.push({ label: getLabel('activations'), value: activationsGB, percentage: (activationsGB / total) * 100, color: '#EF4444' });
+  breakdown.push({ label: getLabel('other.overheads'), value: otherOverheadGB, percentage: (otherOverheadGB / total) * 100, color: '#6B7280' });
   
   // 添加序列长度分解信息（用于调试和用户理解）
   const sequenceBreakdown = [];
   if (textSeqLength > 0) {
-    sequenceBreakdown.push({ label: '文本Token', value: textSeqLength, color: '#3B82F6' });
+    sequenceBreakdown.push({ label: getLabel('text.tokens'), value: textSeqLength, color: '#3B82F6' });
   }
   if (imageSeqLength > 0) {
-    sequenceBreakdown.push({ label: '图像Patch', value: imageSeqLength, color: '#10B981' });
+    sequenceBreakdown.push({ label: getLabel('image.patches'), value: imageSeqLength, color: '#10B981' });
   }
   if (audioSeqLength > 0) {
-    sequenceBreakdown.push({ label: '音频Patch', value: audioSeqLength, color: '#F97316' });
+    sequenceBreakdown.push({ label: getLabel('audio.patches'), value: audioSeqLength, color: '#F97316' });
   }
   if (videoSeqLength > 0) {
-    sequenceBreakdown.push({ label: '视频Patch', value: videoSeqLength, color: '#EC4899' });
+    sequenceBreakdown.push({ label: getLabel('video.patches'), value: videoSeqLength, color: '#EC4899' });
   }
 
   return {

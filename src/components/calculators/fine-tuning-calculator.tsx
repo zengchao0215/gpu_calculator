@@ -11,6 +11,7 @@ import { formatMemorySize } from '@/utils/memory-formulas';
 import { getModelById, getModelsByCategoryAndArchitecture } from '@/lib/models-data';
 import { FineTuningConfig, FineTuningMethod, PrecisionType, QuantizationType } from '@/types';
 import { useCalculatorStore } from '@/store/calculator-store';
+import { useLanguage } from '@/contexts/language-context';
 
 export function FineTuningCalculator() {
   const { 
@@ -19,6 +20,8 @@ export function FineTuningCalculator() {
     fineTuningResult: memoryResult,
     fineTuningLoading: isLoading
   } = useCalculatorStore();
+  
+  const { t } = useLanguage();
 
   // 获取基础模型信息
   const baseModel = useMemo(() => 
@@ -43,10 +46,10 @@ export function FineTuningCalculator() {
   }, []);
 
   const methodDescriptions = {
-    'Full': '全参数微调，更新所有模型参数，效果最好但显存需求最大',
-    'LoRA': '低秩适配，只训练少量参数，显存效率高，效果接近全参数',
-    'QLoRA': '量化LoRA，结合量化技术，显存需求最小，适合大模型',
-    'Prefix': 'Prefix Tuning，只训练前缀参数，显存需求中等'
+    'Full': t('finetuning.full.description'),
+    'LoRA': t('finetuning.lora.description'),
+    'QLoRA': t('finetuning.qlora.description'),
+    'Prefix': t('finetuning.prefix.description')
   };
 
   return (
@@ -62,12 +65,12 @@ export function FineTuningCalculator() {
           <div className="p-2 rounded-xl glass-card">
             <Brain className="w-5 h-5 text-purple-500" />
           </div>
-          <h3 className="text-xl font-semibold">微调配置</h3>
+          <h3 className="text-xl font-semibold">{t('finetuning.config')}</h3>
         </div>
 
         {/* 基础模型选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">基础模型</label>
+          <label className="text-sm font-medium">{t('base.model')}</label>
           <Select 
             value={config.baseModel} 
             onValueChange={(value) => handleConfigChange('baseModel', value)}
@@ -77,7 +80,7 @@ export function FineTuningCalculator() {
             </SelectTrigger>
             <SelectContent className="max-h-60">
               <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase">
-                小模型 (≤3B)
+                {t('small.model.3b')}
               </div>
               {modelsBySize.small.map((model) => (
                 <SelectItem key={model.id} value={model.id}>
@@ -86,7 +89,7 @@ export function FineTuningCalculator() {
               ))}
               
               <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase">
-                中等模型 (3-15B)
+                {t('medium.model.3.15b')}
               </div>
               {modelsBySize.medium.map((model) => (
                 <SelectItem key={model.id} value={model.id}>
@@ -95,7 +98,7 @@ export function FineTuningCalculator() {
               ))}
               
               <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase">
-                大模型 (15-50B)
+                {t('large.model.15.50b')}
               </div>
               {modelsBySize.large.map((model) => (
                 <SelectItem key={model.id} value={model.id}>
@@ -104,7 +107,7 @@ export function FineTuningCalculator() {
               ))}
               
               <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase">
-                超大模型 (&gt;50B)
+                {t('xlarge.model.50b')}
               </div>
               {modelsBySize.xlarge.map((model) => (
                 <SelectItem key={model.id} value={model.id}>
@@ -118,11 +121,11 @@ export function FineTuningCalculator() {
           {baseModel && (
             <div className="p-3 bg-white/10 rounded-lg border border-white/20 text-xs space-y-1">
               <div className="flex justify-between">
-                <span>参数量:</span>
+                <span>{t('parameters')}:</span>
                 <span className="font-mono">{baseModel.params}B</span>
               </div>
               <div className="flex justify-between">
-                <span>架构:</span>
+                <span>{t('architecture')}:</span>
                 <span className="font-mono">{baseModel.architecture}</span>
               </div>
             </div>
@@ -131,7 +134,7 @@ export function FineTuningCalculator() {
 
         {/* 微调方法选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">微调方法</label>
+          <label className="text-sm font-medium">{t('finetuning.method')}</label>
           <Select 
             value={config.method} 
             onValueChange={(value: FineTuningMethod) => handleConfigChange('method', value)}
@@ -140,9 +143,9 @@ export function FineTuningCalculator() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Full">全参数微调</SelectItem>
-              <SelectItem value="LoRA">LoRA (推荐)</SelectItem>
-              <SelectItem value="QLoRA">QLoRA (大模型推荐)</SelectItem>
+              <SelectItem value="Full">{t('finetuning.full.params')}</SelectItem>
+              <SelectItem value="LoRA">{t('lora.recommended')}</SelectItem>
+              <SelectItem value="QLoRA">{t('qlora.large.model.recommended')}</SelectItem>
               <SelectItem value="Prefix">Prefix Tuning</SelectItem>
             </SelectContent>
           </Select>
@@ -156,12 +159,12 @@ export function FineTuningCalculator() {
         {/* LoRA 特定配置 */}
         {(config.method === 'LoRA' || config.method === 'QLoRA') && (
           <div className="space-y-4 p-4 bg-white/5 rounded-lg border border-white/10">
-            <div className="text-sm font-medium text-purple-600">LoRA 参数配置</div>
+            <div className="text-sm font-medium text-purple-600">{t('lora.parameters.config')}</div>
             
             {/* LoRA Rank */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm">Rank (r)</label>
+                <label className="text-sm">{t('rank.r')}</label>
                 <AnimatedNumber 
                   value={config.loraRank!} 
                   className="text-sm font-mono text-purple-600"
@@ -176,15 +179,15 @@ export function FineTuningCalculator() {
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-gray-500">
-                <span>1 (最小)</span>
-                <span>128 (最大)</span>
+                <span>1 ({t('minimum')})</span>
+                <span>128 ({t('maximum')})</span>
               </div>
             </div>
 
             {/* LoRA Alpha */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm">Alpha (α)</label>
+                <label className="text-sm">{t('alpha.a')}</label>
                 <AnimatedNumber 
                   value={config.loraAlpha!} 
                   className="text-sm font-mono text-purple-600"
@@ -205,8 +208,8 @@ export function FineTuningCalculator() {
             </div>
 
             <div className="text-xs text-gray-600">
-              <div>• Rank越大，LoRA参数越多，效果可能更好但显存更多</div>
-              <div>• Alpha控制LoRA的学习率缩放，通常设为Rank的2-4倍</div>
+              <div>• {t('rank.larger.more.params')}</div>
+              <div>• {t('alpha.controls.learning.rate')}</div>
             </div>
           </div>
         )}
@@ -231,7 +234,7 @@ export function FineTuningCalculator() {
           </div>
 
           <div className="space-y-3">
-            <label className="text-sm font-medium">训练精度</label>
+            <label className="text-sm font-medium">{t('training.precision')}</label>
             <Select 
               value={config.precision} 
               onValueChange={(value: PrecisionType) => handleConfigChange('precision', value)}
@@ -263,7 +266,7 @@ export function FineTuningCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <TrendingUp className="w-5 h-5 text-purple-500" />
             </div>
-            <h3 className="text-xl font-semibold">微调显存</h3>
+            <h3 className="text-xl font-semibold">{t('finetuning.memory.requirement')}</h3>
           </div>
           
           <div className="text-center">
@@ -279,13 +282,13 @@ export function FineTuningCalculator() {
           {/* 方法效率显示 */}
           <div className="mt-4 p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
             <div className="text-xs text-purple-700 font-medium">
-              微调效率
+              {t('finetuning.efficiency')}
             </div>
             <div className="text-sm mt-1">
-              {config.method === 'Full' && '全参数微调，效果最佳但显存需求大'}
-              {config.method === 'LoRA' && `LoRA微调，约${((config.loraRank! * 2 * 4096) / (baseModel?.params || 7) / 1e9 * 100).toFixed(2)}%参数需训练`}
-              {config.method === 'QLoRA' && 'QLoRA微调，显存最优，适合大模型'}
-              {config.method === 'Prefix' && 'Prefix微调，约1%参数需训练'}
+              {config.method === 'Full' && t('finetuning.full.effect.best')}
+              {config.method === 'LoRA' && `${t('finetuning.lora.params.percent')}${((config.loraRank! * 2 * 4096) / (baseModel?.params || 7) / 1e9 * 100).toFixed(2)}${t('finetuning.params.to.train')}`}
+              {config.method === 'QLoRA' && t('finetuning.qlora.optimal')}
+              {config.method === 'Prefix' && t('finetuning.prefix.one.percent')}
             </div>
           </div>
         </div>
@@ -347,49 +350,49 @@ export function FineTuningCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <Lightbulb className="w-5 h-5 text-yellow-500" />
             </div>
-            <h3 className="text-lg font-semibold">微调建议</h3>
+            <h3 className="text-lg font-semibold">{t('finetuning.suggestions')}</h3>
           </div>
           
           <div className="space-y-3 text-sm">
             {config.method === 'Full' && baseModel && baseModel.params > 7 && (
               <div className="flex items-start gap-2 p-3 bg-orange-500/10 rounded-lg border border-orange-500/20">
                 <div className="w-2 h-2 rounded-full bg-orange-500 mt-1.5 flex-shrink-0" />
-                <span>大模型全参数微调显存需求巨大，建议考虑LoRA或QLoRA</span>
+                <span>{t('finetuning.large.model.suggestion')}</span>
               </div>
             )}
 
             {config.method === 'LoRA' && config.loraRank! < 8 && (
               <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
                 <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
-                <span>Rank值较小，可能限制微调效果，建议尝试更大的Rank</span>
+                <span>{t('finetuning.rank.too.small')}</span>
               </div>
             )}
 
             {config.method === 'LoRA' && config.loraRank! > 64 && (
               <div className="flex items-start gap-2 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                 <div className="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 flex-shrink-0" />
-                <span>Rank值较大，显存需求增加，如果显存不足可考虑降低Rank</span>
+                <span>{t('rank.large.memory.increase')}</span>
               </div>
             )}
 
             {config.quantization === 'None' && baseModel && baseModel.params > 13 && (
               <div className="flex items-start gap-2 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
                 <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
-                <span>大模型建议使用量化以减少基础模型显存占用</span>
+                <span>{t('large.model.use.quantization')}</span>
               </div>
             )}
 
             {config.method === 'QLoRA' && config.quantization === 'None' && (
               <div className="flex items-start gap-2 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
                 <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
-                <span>QLoRA方法需要配合量化使用才能发挥优势</span>
+                <span>{t('qlora.needs.quantization')}</span>
               </div>
             )}
 
             {config.loraAlpha! / config.loraRank! < 1 && (config.method === 'LoRA' || config.method === 'QLoRA') && (
               <div className="flex items-start gap-2 p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
                 <div className="w-2 h-2 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
-                <span>Alpha/Rank比值过小，可能导致学习率过低，建议增大Alpha</span>
+                <span>{t('alpha.rank.ratio.too.small')}</span>
               </div>
             )}
           </div>

@@ -217,16 +217,16 @@ export const useCalculatorStore = create<CalculatorStore>()(
           set({ activeTab: tab, primaryTab: 'nlp' });
           
           // 切换NLP标签页时自动计算
-          switch (tab) {
-            case 'training':
-              state.calculateTrainingMemory();
-              break;
-            case 'inference':
-              state.calculateInferenceMemory();
-              break;
-            case 'finetuning':
-              state.calculateFineTuningMemory();
-              break;
+        switch (tab) {
+          case 'training':
+            state.calculateTrainingMemory();
+            break;
+          case 'inference':
+            state.calculateInferenceMemory();
+            break;
+          case 'finetuning':
+            state.calculateFineTuningMemory();
+            break;
             case 'grpo':
               state.calculateGRPOMemory();
               break;

@@ -224,9 +224,9 @@ def calculate_training_activations(batch_size, seq_len, hidden_size, num_layers,
     
     # 总激活值
     total_activations = per_layer_activations * num_layers
-    
+
     # 梯度检查点优化
-    if gradient_checkpointing:
+if gradient_checkpointing:
         total_activations *= 0.3  # 减少约70%
     
     return total_activations / (1024^3)
@@ -567,7 +567,7 @@ memory_reduction = (old_resolution / new_resolution) ** 2
    
 5. **QLoRA**
    - Dettmers et al. "QLoRA: Efficient Finetuning of Quantized LLMs" (2023)
-
+   
 6. **GRPO算法**
    - Group-wise Ranking Preference Optimization相关论文
 

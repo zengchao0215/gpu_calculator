@@ -1399,6 +1399,8 @@ export interface MultiGPUConfig {
   totalCost: number;   // 总成本
   memoryPerNode: number; // 每台机器总显存
   suggestion: string;  // 推荐理由
+  suggestionKey?: string; // 翻译键
+  suggestionParams?: Record<string, string | number>; // 翻译参数
 }
 
 export function getMultiGPURecommendations(requiredMemoryGB: number): MultiGPUConfig[] {
@@ -1425,7 +1427,12 @@ export function getMultiGPURecommendations(requiredMemoryGB: number): MultiGPUCo
           totalMemory: gpuMemory * gpusPerNode,
           totalCost: gpu.price * gpusPerNode,
           memoryPerNode: gpuMemory * gpusPerNode,
-          suggestion: `单机${gpusPerNode}卡配置，${(gpuMemory * gpusPerNode).toFixed(0)}GB总显存`
+          suggestion: `单机${gpusPerNode}卡配置，${(gpuMemory * gpusPerNode).toFixed(0)}GB总显存`,
+          suggestionKey: 'gpu.multi.single.machine.config',
+          suggestionParams: { 
+            gpusPerNode, 
+            totalMemory: (gpuMemory * gpusPerNode).toFixed(0) 
+          }
         };
         recommendations.push(config);
       } else {
@@ -1441,7 +1448,14 @@ export function getMultiGPURecommendations(requiredMemoryGB: number): MultiGPUCo
             totalMemory: gpuMemory * totalGPUs,
             totalCost: gpu.price * totalGPUs,
             memoryPerNode: gpuMemory * gpusPerNode,
-            suggestion: `${nodesNeeded}台机器，每台${gpusPerNode}卡，共${totalGPUs}卡 ${(gpuMemory * totalGPUs).toFixed(0)}GB总显存`
+            suggestion: `${nodesNeeded}台机器，每台${gpusPerNode}卡，共${totalGPUs}卡 ${(gpuMemory * totalGPUs).toFixed(0)}GB总显存`,
+            suggestionKey: 'gpu.multi.multiple.machines.config',
+            suggestionParams: { 
+              numNodes: nodesNeeded,
+              gpusPerNode,
+              totalGPUs,
+              totalMemory: (gpuMemory * totalGPUs).toFixed(0)
+            }
           };
           recommendations.push(config);
         }

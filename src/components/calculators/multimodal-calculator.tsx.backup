@@ -157,10 +157,10 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FP32">{t('precision.fp32')}</SelectItem>
-                  <SelectItem value="FP16">{t('precision.fp16')}</SelectItem>
-                  <SelectItem value="BF16">{t('precision.bf16')}</SelectItem>
-                  <SelectItem value="FP8">{t('precision.fp8')}</SelectItem>
+                  <SelectItem value="FP32">FP32 (32位)</SelectItem>
+                  <SelectItem value="FP16">FP16 (16位)</SelectItem>
+                  <SelectItem value="BF16">BF16 (Brain Float)</SelectItem>
+                  <SelectItem value="FP8">FP8 (8位浮点)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -177,10 +177,10 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FP32">{t('precision.fp32')}</SelectItem>
-                  <SelectItem value="FP16">{t('precision.fp16')}</SelectItem>
-                  <SelectItem value="BF16">{t('precision.bf16')}</SelectItem>
-                  <SelectItem value="FP8">{t('precision.fp8')}</SelectItem>
+                  <SelectItem value="FP32">FP32 (32位)</SelectItem>
+                  <SelectItem value="FP16">FP16 (16位)</SelectItem>
+                  <SelectItem value="BF16">BF16 (Brain Float)</SelectItem>
+                  <SelectItem value="FP8">FP8 (8位浮点)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -197,10 +197,10 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FP32">{t('precision.fp32')}</SelectItem>
-                  <SelectItem value="FP16">{t('precision.fp16')}</SelectItem>
-                  <SelectItem value="BF16">{t('precision.bf16')}</SelectItem>
-                  <SelectItem value="FP8">{t('precision.fp8')}</SelectItem>
+                  <SelectItem value="FP32">FP32 (32位)</SelectItem>
+                  <SelectItem value="FP16">FP16 (16位)</SelectItem>
+                  <SelectItem value="BF16">BF16 (Brain Float)</SelectItem>
+                  <SelectItem value="FP8">FP8 (8位浮点)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -246,13 +246,13 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
             <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2">
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image className="w-4 h-4" />
-              {t('multimodal.image.config')}
+              图像配置
             </h4>
           
           {/* 图像分辨率 */}
           <div className="space-y-3">
             <label className="text-sm font-medium flex justify-between">
-              <span>{t('multimodal.image.resolution')}</span>
+              <span>图像分辨率</span>
               <span className="font-mono text-cyan-600">{config.imageResolution}x{config.imageResolution}</span>
             </label>
             <Select 
@@ -263,10 +263,10 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="224">{t('resolution.224')}</SelectItem>
-                <SelectItem value="336">{t('resolution.336')}</SelectItem>
-                <SelectItem value="448">{t('resolution.448')}</SelectItem>
-                <SelectItem value="512">{t('resolution.512')}</SelectItem>
+                <SelectItem value="224">224x224 (标准)</SelectItem>
+                <SelectItem value="336">336x336 (中等)</SelectItem>
+                <SelectItem value="448">448x448 (高清)</SelectItem>
+                <SelectItem value="512">512x512 (超清)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -274,7 +274,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
           {/* Patch大小 */}
           <div className="space-y-3">
             <label className="text-sm font-medium flex justify-between">
-              <span>{t('multimodal.patch.size')}</span>
+              <span>Patch大小</span>
               <span className="font-mono text-cyan-600">{config.patchSize}x{config.patchSize}</span>
             </label>
             <Select 
@@ -285,9 +285,9 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="14">{t('patch.14')}</SelectItem>
-                <SelectItem value="16">{t('patch.16')}</SelectItem>
-                <SelectItem value="32">{t('patch.32')}</SelectItem>
+                <SelectItem value="14">14x14 (细粒度)</SelectItem>
+                <SelectItem value="16">16x16 (标准)</SelectItem>
+                <SelectItem value="32">32x32 (粗粒度)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -295,7 +295,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
           {/* 每样本图像数量 */}
           <div className="space-y-3">
             <label className="text-sm font-medium flex justify-between">
-              <span>{t('multimodal.num.images')}</span>
+              <span>每样本图像数量</span>
               <span className="font-mono text-cyan-600">{config.numImages}</span>
             </label>
             <Slider
@@ -310,7 +310,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
 
           {/* 独立视觉编码器 */}
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">{t('multimodal.vision.encoder')}</label>
+            <label className="text-sm font-medium">独立视觉编码器</label>
             <button
               onClick={() => handleConfigChange('hasVisionEncoder', !config.hasVisionEncoder)}
               className={`w-12 h-6 rounded-full transition-all duration-300 ${
@@ -325,10 +325,10 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
 
             {/* 图像Token统计 */}
             <div className="glass-card p-3 space-y-2">
-              <div className="text-xs text-gray-400">{t('multimodal.image.tokens')}:</div>
+              <div className="text-xs text-gray-400">图像Token统计:</div>
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div>{t('multimodal.patches.per.image')}: <span className="font-mono text-cyan-400">{numPatches}</span></div>
-                <div>{t('multimodal.total.image.tokens')}: <span className="font-mono text-cyan-400">{totalImageTokens}</span></div>
+                <div>每图像Patch数: <span className="font-mono text-cyan-400">{numPatches}</span></div>
+                <div>总图像Token数: <span className="font-mono text-cyan-400">{totalImageTokens}</span></div>
               </div>
             </div>
           </div>
@@ -341,13 +341,13 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.814L4.828 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.828l3.555-3.814a1 1 0 011.617.814zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 11-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd" />
               </svg>
-              {t('multimodal.audio.config')}
+              音频配置
             </h4>
             
             {/* 音频采样率 */}
             <div className="space-y-3">
               <label className="text-sm font-medium flex justify-between">
-                <span>{t('multimodal.sample.rate')}</span>
+                <span>采样率 (Hz)</span>
                 <span className="font-mono text-cyan-600">{config.audioSampleRate || 16000}</span>
               </label>
               <Select 
@@ -358,10 +358,10 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="16000">{t('samplerate.16k')}</SelectItem>
-                  <SelectItem value="22050">{t('samplerate.22k')}</SelectItem>
-                  <SelectItem value="44100">{t('samplerate.44k')}</SelectItem>
-                  <SelectItem value="48000">{t('samplerate.48k')}</SelectItem>
+                  <SelectItem value="16000">16kHz (语音)</SelectItem>
+                  <SelectItem value="22050">22.05kHz (高质量语音)</SelectItem>
+                  <SelectItem value="44100">44.1kHz (CD质量)</SelectItem>
+                  <SelectItem value="48000">48kHz (专业音频)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -369,7 +369,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
             {/* 音频窗口长度 */}
             <div className="space-y-3">
               <label className="text-sm font-medium flex justify-between">
-                <span>{t('multimodal.window.length')}</span>
+                <span>音频窗口长度 (秒)</span>
                 <span className="font-mono text-cyan-600">{config.audioWindowLength || 30}</span>
               </label>
               <Slider
@@ -384,7 +384,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
 
             {/* 独立音频编码器 */}
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">{t('multimodal.audio.encoder')}</label>
+              <label className="text-sm font-medium">独立音频编码器</label>
               <button
                 onClick={() => handleConfigChange('hasAudioEncoder', !(config.hasAudioEncoder))}
                 className={`w-12 h-6 rounded-full transition-all duration-300 ${
@@ -406,13 +406,13 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
               </svg>
-              {t('multimodal.video.config')}
+              视频配置
             </h4>
             
             {/* 视频帧率 */}
             <div className="space-y-3">
               <label className="text-sm font-medium flex justify-between">
-                <span>{t('multimodal.frame.rate')}</span>
+                <span>视频帧率 (FPS)</span>
                 <span className="font-mono text-cyan-600">{config.videoFrameRate || 25}</span>
               </label>
               <Select 
@@ -423,11 +423,11 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="10">{t('framerate.10')}</SelectItem>
-                  <SelectItem value="15">{t('framerate.15')}</SelectItem>
-                  <SelectItem value="25">{t('framerate.25')}</SelectItem>
-                  <SelectItem value="30">{t('framerate.30')}</SelectItem>
-                  <SelectItem value="60">{t('framerate.60')}</SelectItem>
+                  <SelectItem value="10">10 FPS (低帧率)</SelectItem>
+                  <SelectItem value="15">15 FPS (中等)</SelectItem>
+                  <SelectItem value="25">25 FPS (标准)</SelectItem>
+                  <SelectItem value="30">30 FPS (高帧率)</SelectItem>
+                  <SelectItem value="60">60 FPS (超高帧率)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -435,7 +435,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
             {/* 视频长度 */}
             <div className="space-y-3">
               <label className="text-sm font-medium flex justify-between">
-                <span>{t('multimodal.video.length')}</span>
+                <span>视频长度 (秒)</span>
                 <span className="font-mono text-cyan-600">{config.videoLength || 10}</span>
               </label>
               <Slider
@@ -450,7 +450,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
 
             {/* 独立视频编码器 */}
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">{t('multimodal.video.encoder')}</label>
+              <label className="text-sm font-medium">独立视频编码器</label>
               <button
                 onClick={() => handleConfigChange('hasVideoEncoder', !(config.hasVideoEncoder))}
                 className={`w-12 h-6 rounded-full transition-all duration-300 ${
@@ -478,7 +478,7 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
             <Database className="w-5 h-5 text-cyan-500" />
           </div>
           <h3 className="text-xl font-semibold">
-            {currentMode === 'training' ? t('multimodal.memory.requirement') : currentMode === 'finetuning' ? t('multimodal.memory.requirement.finetuning') : t('multimodal.memory.requirement.inference')}
+            多模态{currentMode === 'training' ? '训练' : currentMode === 'finetuning' ? '微调' : '推理'}显存需求
           </h3>
         </div>
 
@@ -503,14 +503,14 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
                   format={(n) => formatMemorySize(n)} 
                 />
               </div>
-              <div className="text-sm text-gray-400">{t('memory.total.requirement')}</div>
+              <div className="text-sm text-gray-400">总显存需求</div>
             </div>
 
             {/* 显存分解 */}
             <div className="space-y-3">
               <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
-                {t('memory.breakdown')}
+                显存分解
               </h4>
               
               <div className="space-y-4">
@@ -559,19 +559,19 @@ export function MultimodalCalculator({ mode = 'inference' }: MultimodalCalculato
             <div className="glass-card p-4 space-y-2">
               <h4 className="text-sm font-medium text-cyan-300 flex items-center gap-2">
                 <Eye className="w-4 h-4" />
-                {config.modalityType?.replace(/-/g, '+').toUpperCase() || t('mode.multimodal')} {t('multimodal.features')}
+                {config.modalityType?.replace(/-/g, '+').toUpperCase() || '多'}模态特性
               </h4>
               <ul className="text-xs text-gray-400 space-y-1">
-                {config.modalityType?.includes('text') && <li>• {t('multimodal.features.text')}</li>}
-                {config.modalityType?.includes('image') && <li>• {t('multimodal.features.image')}</li>}
-                {config.modalityType?.includes('audio') && <li>• {t('multimodal.features.audio')}</li>}
-                {config.modalityType?.includes('video') && <li>• {t('multimodal.features.video')}</li>}
-                <li>• {t('multimodal.features.attention')}</li>
+                {config.modalityType?.includes('text') && <li>• 支持文本序列编码和生成</li>}
+                {config.modalityType?.includes('image') && <li>• 图像被分割为patch进行处理</li>}
+                {config.modalityType?.includes('audio') && <li>• 音频通过窗口切片进行编码</li>}
+                {config.modalityType?.includes('video') && <li>• 视频按帧序列处理，结合时序信息</li>}
+                <li>• 跨模态注意力机制增加计算开销</li>
                 {(config.modalityType?.includes('image') || config.modalityType?.includes('video')) && 
-                  <li>• {t('multimodal.features.vision.shared')}</li>}
+                  <li>• 视觉编码器可选独立或共享参数</li>}
                 {config.modalityType?.includes('audio') && 
-                  <li>• {t('multimodal.features.audio.spectrum')}</li>}
-                <li>• {t('multimodal.features.cache')}</li>
+                  <li>• 音频编码器处理频谱特征</li>}
+                <li>• 多模态特征缓存用于加速推理</li>
               </ul>
             </div>
           </div>

@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useCalculatorStore } from '@/store/calculator-store';
 import { formatDistanceToNow } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
+import { zhCN, enUS } from 'date-fns/locale';
 import { Trash2, GitCompare, Copy, X } from 'lucide-react';
+import { useLanguage } from '@/contexts/language-context';
 
 interface HistoryPanelProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
     setFineTuningConfig,
     setActiveTab
   } = useCalculatorStore();
+  
+  const { t, language } = useLanguage();
 
   const [activeHistoryTab, setActiveHistoryTab] = useState<'history' | 'compare'>('history');
 
@@ -36,9 +39,9 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'training': return '训练';
-      case 'inference': return '推理';
-      case 'finetuning': return '微调';
+      case 'training': return t('mode.training');
+      case 'inference': return t('mode.inference');
+      case 'finetuning': return t('mode.finetuning');
       default: return type;
     }
   };
@@ -78,7 +81,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
       <div className="glass-card w-full max-w-6xl h-[80vh] flex flex-col">
         {/* 头部 */}
         <div className="flex items-center justify-between p-6 border-b border-white/20">
-          <h2 className="text-2xl font-bold">计算历史</h2>
+          <h2 className="text-2xl font-bold">{t('calculation.history')}</h2>
           <button
             onClick={onClose}
             className="glass-button !p-2 hover:bg-red-500/20"
@@ -97,7 +100,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                 : 'text-gray-600 hover:text-blue-600'
             }`}
           >
-            历史记录 ({history.length})
+            {t('history.records')} ({history.length})
           </button>
           <button
             onClick={() => setActiveHistoryTab('compare')}
@@ -107,7 +110,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                 : 'text-gray-600 hover:text-purple-600'
             }`}
           >
-            对比列表 ({compareList.length})
+            {t('compare.list')} ({compareList.length})
           </button>
         </div>
 
@@ -119,7 +122,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
               <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">
-                    共 {history.length} 条记录
+                    {t('total.records')} {history.length} {t('records.count')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -129,7 +132,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                     disabled={history.length === 0}
                   >
                     <Trash2 className="w-4 h-4" />
-                    清空
+                    {t('clear')}
                   </button>
                 </div>
               </div>
@@ -138,7 +141,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
               <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-glass">
                 {history.length === 0 ? (
                   <div className="text-center py-12 text-gray-500">
-                    暂无历史记录
+                    {t('no.history.records')}
                   </div>
                 ) : (
                   history.map((item) => (
@@ -160,20 +163,20 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                             <span className="text-xs text-gray-500">
                               {formatDistanceToNow(new Date(item.timestamp), { 
                                 addSuffix: true, 
-                                locale: zhCN 
+                                locale: language === 'zh' ? zhCN : enUS 
                               })}
                             </span>
                           </div>
                           
                           <div className="text-lg font-bold text-blue-600 mb-1">
-                            总显存: {formatBytes(item.result.total * 1024 ** 3)}
+                            {t('total.memory')}: {formatBytes(item.result.total * 1024 ** 3)}
                           </div>
                           
                           <div className="flex items-center gap-4 text-sm text-gray-600">
-                            <span>模型: {formatBytes(item.result.modelParams * 1024 ** 3)}</span>
-                            <span>激活: {formatBytes(item.result.activations * 1024 ** 3)}</span>
+                            <span>{t('model')}: {formatBytes(item.result.modelParams * 1024 ** 3)}</span>
+                            <span>{t('activations')}: {formatBytes(item.result.activations * 1024 ** 3)}</span>
                             {item.result.optimizer > 0 && (
-                              <span>优化器: {formatBytes(item.result.optimizer * 1024 ** 3)}</span>
+                              <span>{t('optimizer')}: {formatBytes(item.result.optimizer * 1024 ** 3)}</span>
                             )}
                           </div>
                         </div>
@@ -239,7 +242,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
               <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">
-                    已选择 {compareList.length}/4 个配置进行对比
+                    {t('selected.configs')} {compareList.length}/4 {t('configs.for.compare')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -249,7 +252,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                     disabled={compareList.length === 0}
                   >
                     <X className="w-4 h-4" />
-                    清空对比
+                    {t('clear.compare')}
                   </button>
                 </div>
               </div>
@@ -259,8 +262,8 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                 {compareList.length === 0 ? (
                   <div className="text-center py-12 text-gray-500">
                     <GitCompare className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>从历史记录中选择配置进行对比</p>
-                    <p className="text-sm mt-2">最多可以对比 4 个配置</p>
+                    <p>{t('select.from.history')}</p>
+                    <p className="text-sm mt-2">{t('max.4.configs')}</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -288,22 +291,22 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                             <div className="text-lg font-bold text-blue-600">
                               {formatBytes(item.result.total * 1024 ** 3)}
                             </div>
-                            <div className="text-xs text-gray-500">总显存</div>
+                                                          <div className="text-xs text-gray-500">{t('total.memory')}</div>
                           </div>
 
                           <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div className="text-center p-2 bg-white/20 rounded">
-                              <div className="font-medium">
-                                {formatBytes(item.result.modelParams * 1024 ** 3)}
+                                                          <div className="text-center p-2 bg-white/20 rounded">
+                                <div className="font-medium">
+                                  {formatBytes(item.result.modelParams * 1024 ** 3)}
+                                </div>
+                                <div className="text-gray-600">{t('model')}</div>
                               </div>
-                              <div className="text-gray-600">模型</div>
-                            </div>
-                            <div className="text-center p-2 bg-white/20 rounded">
-                              <div className="font-medium">
-                                {formatBytes(item.result.activations * 1024 ** 3)}
+                              <div className="text-center p-2 bg-white/20 rounded">
+                                <div className="font-medium">
+                                  {formatBytes(item.result.activations * 1024 ** 3)}
+                                </div>
+                                <div className="text-gray-600">{t('activations')}</div>
                               </div>
-                              <div className="text-gray-600">激活</div>
-                            </div>
                           </div>
 
                           {item.result.optimizer > 0 && (
@@ -311,7 +314,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                               <div className="font-medium">
                                 {formatBytes(item.result.optimizer * 1024 ** 3)}
                               </div>
-                              <div className="text-gray-600">优化器</div>
+                              <div className="text-gray-600">{t('optimizer')}</div>
                             </div>
                           )}
 
@@ -319,7 +322,7 @@ export default function HistoryPanel({ isOpen, onClose }: HistoryPanelProps) {
                             onClick={() => handleLoadConfig(item)}
                             className="w-full glass-button !py-2 !text-xs"
                           >
-                            加载配置
+                            {t('load.config')}
                           </button>
                         </div>
                       </div>

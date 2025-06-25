@@ -11,6 +11,7 @@ import { formatMemorySize } from '@/utils/memory-formulas';
 import { getModelById, getModelsByCategoryAndArchitecture } from '@/lib/models-data';
 import { GRPOConfig, PrecisionType } from '@/types';
 import { useCalculatorStore } from '@/store/calculator-store';
+import { useLanguage } from '@/contexts/language-context';
 
 export function GRPOCalculator() {
   const { 
@@ -19,6 +20,8 @@ export function GRPOCalculator() {
     grpoResult: memoryResult,
     grpoLoading: isLoading
   } = useCalculatorStore();
+  
+  const { t } = useLanguage();
 
   // 获取当前选中模型信息
   const selectedModel = useMemo(() => 
@@ -47,12 +50,12 @@ export function GRPOCalculator() {
           <div className="p-2 rounded-xl glass-card">
             <Brain className="w-5 h-5 text-purple-500" />
           </div>
-          <h3 className="text-xl font-semibold">GRPO配置</h3>
+          <h3 className="text-xl font-semibold">{t('grpo.config')}</h3>
         </div>
 
         {/* 模型选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">预设模型</label>
+          <label className="text-sm font-medium">{t('grpo.preset.model')}</label>
           <Select 
             value={config.modelId} 
             onValueChange={(value) => handleConfigChange('modelId', value)}
@@ -81,19 +84,19 @@ export function GRPOCalculator() {
             <div className="glass-card p-3 mt-3">
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <span className="text-gray-500">参数量:</span>
+                  <span className="text-gray-500">{t('grpo.parameters')}:</span>
                   <span className="ml-2 font-mono">{selectedModel.params}B</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">架构:</span>
+                  <span className="text-gray-500">{t('grpo.architecture')}:</span>
                   <span className="ml-2 font-mono">{selectedModel.architecture}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">隐藏层:</span>
+                  <span className="text-gray-500">{t('grpo.hidden.layers')}:</span>
                   <span className="ml-2 font-mono">{selectedModel.hiddenSize}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">层数:</span>
+                  <span className="text-gray-500">{t('grpo.num.layers')}:</span>
                   <span className="ml-2 font-mono">{selectedModel.numLayers}</span>
                 </div>
               </div>
@@ -103,7 +106,7 @@ export function GRPOCalculator() {
 
         {/* 精度选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">训练精度</label>
+          <label className="text-sm font-medium">{t('grpo.training.precision')}</label>
           <Select 
             value={config.precision} 
             onValueChange={(value: PrecisionType) => handleConfigChange('precision', value)}
@@ -112,9 +115,9 @@ export function GRPOCalculator() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="FP32">FP32 (全精度)</SelectItem>
-              <SelectItem value="FP16">FP16 (半精度)</SelectItem>
-              <SelectItem value="BF16">BF16 (半精度)</SelectItem>
+              <SelectItem value="FP32">{t('precision.fp32')}</SelectItem>
+              <SelectItem value="FP16">{t('precision.fp16')}</SelectItem>
+              <SelectItem value="BF16">{t('precision.bf16')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -122,7 +125,7 @@ export function GRPOCalculator() {
         {/* 批量大小 */}
         <div className="space-y-3">
           <label className="text-sm font-medium flex justify-between">
-            <span>批量大小</span>
+            <span>{t('grpo.batch.size')}</span>
             <span className="font-mono text-purple-600">{config.batchSize}</span>
           </label>
           <Slider
@@ -138,7 +141,7 @@ export function GRPOCalculator() {
         {/* 序列长度 */}
         <div className="space-y-3">
           <label className="text-sm font-medium flex justify-between">
-            <span>最大序列长度</span>
+            <span>{t('grpo.max.sequence.length')}</span>
             <span className="font-mono text-purple-600">{config.sequenceLength}</span>
           </label>
           <Slider
@@ -154,7 +157,7 @@ export function GRPOCalculator() {
         {/* 生成数量 */}
         <div className="space-y-3">
           <label className="text-sm font-medium flex justify-between">
-            <span>每提示生成数量</span>
+            <span>{t('grpo.generations.per.prompt')}</span>
             <span className="font-mono text-purple-600">{config.numGenerations}</span>
           </label>
           <Slider
@@ -166,18 +169,18 @@ export function GRPOCalculator() {
             className="w-full"
           />
           <p className="text-xs text-gray-500">
-            GRPO为每个提示生成多个响应进行对比学习
+            {t('grpo.description')}
           </p>
         </div>
 
         {/* 高级设置 */}
         <div className="space-y-4 pt-4 border-t border-white/10">
-          <h4 className="text-sm font-medium text-gray-300">高级设置</h4>
+          <h4 className="text-sm font-medium text-gray-300">{t('grpo.advanced.settings')}</h4>
           
           {/* 梯度累积步数 */}
           <div className="space-y-2">
             <label className="text-sm font-medium flex justify-between">
-              <span>梯度累积步数</span>
+              <span>{t('grpo.gradient.accumulation.steps')}</span>
               <span className="font-mono text-purple-600">{config.gradientAccumulationSteps}</span>
             </label>
             <Slider
@@ -192,7 +195,7 @@ export function GRPOCalculator() {
 
           {/* 8位优化器 */}
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">8位优化器</label>
+            <label className="text-sm font-medium">{t('grpo.use.8bit.optimizer')}</label>
             <button
               onClick={() => handleConfigChange('use8BitOptimizer', !config.use8BitOptimizer)}
               className={`w-12 h-6 rounded-full transition-all duration-300 ${
@@ -207,7 +210,7 @@ export function GRPOCalculator() {
 
           {/* 梯度检查点 */}
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">梯度检查点</label>
+            <label className="text-sm font-medium">{t('grpo.gradient.checkpointing')}</label>
             <button
               onClick={() => handleConfigChange('gradientCheckpointing', !config.gradientCheckpointing)}
               className={`w-12 h-6 rounded-full transition-all duration-300 ${
@@ -233,7 +236,7 @@ export function GRPOCalculator() {
           <div className="p-2 rounded-xl glass-card">
             <Database className="w-5 h-5 text-purple-500" />
           </div>
-          <h3 className="text-xl font-semibold">GRPO显存需求</h3>
+          <h3 className="text-xl font-semibold">{t('grpo.memory.requirement')}</h3>
         </div>
 
         {isLoading && (
@@ -257,14 +260,14 @@ export function GRPOCalculator() {
                   format={(n) => formatMemorySize(n)} 
                 />
               </div>
-              <div className="text-sm text-gray-400">总显存需求</div>
+              <div className="text-sm text-gray-400">{t('memory.total.requirement')}</div>
             </div>
 
             {/* 显存分解 */}
             <div className="space-y-3">
               <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
-                显存分解
+                {t('memory.breakdown')}
               </h4>
               
               <div className="space-y-4">
@@ -313,14 +316,14 @@ export function GRPOCalculator() {
             <div className="glass-card p-4 space-y-2">
               <h4 className="text-sm font-medium text-purple-300 flex items-center gap-2">
                 <Zap className="w-4 h-4" />
-                GRPO特性
+                {t('grpo.features')}
               </h4>
               <ul className="text-xs text-gray-400 space-y-1">
-                <li>• 使用策略模型和参考模型进行对比学习</li>
-                <li>• 生成多个响应以计算群体相对优势</li>
-                <li>• 支持8位优化器降低内存使用</li>
-                <li>• 梯度检查点可节省70%激活值内存</li>
-                <li>• 比PPO节省约40-60%显存</li>
+                <li>• {t('grpo.features.policy.reference')}</li>
+                <li>• {t('grpo.features.multiple.responses')}</li>
+                <li>• {t('grpo.features.8bit.optimizer')}</li>
+                <li>• {t('grpo.features.gradient.checkpointing')}</li>
+                <li>• {t('grpo.features.memory.saving')}</li>
               </ul>
             </div>
           </div>

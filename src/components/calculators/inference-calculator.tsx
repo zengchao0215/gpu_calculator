@@ -11,6 +11,7 @@ import { formatMemorySize } from '@/utils/memory-formulas';
 import { getModelById, getModelsByCategoryAndArchitecture } from '@/lib/models-data';
 import { InferenceConfig, PrecisionType, QuantizationType } from '@/types';
 import { useCalculatorStore } from '@/store/calculator-store';
+import { useLanguage } from '@/contexts/language-context';
 
 export function InferenceCalculator() {
   const { 
@@ -19,6 +20,8 @@ export function InferenceCalculator() {
     inferenceResult: memoryResult,
     inferenceLoading: isLoading
   } = useCalculatorStore();
+  
+  const { t } = useLanguage();
 
   // 获取当前选中模型信息
   const selectedModel = useMemo(() => 
@@ -47,12 +50,12 @@ export function InferenceCalculator() {
           <div className="p-2 rounded-xl glass-card">
             <Cpu className="w-5 h-5 text-green-500" />
           </div>
-          <h3 className="text-xl font-semibold">推理配置</h3>
+          <h3 className="text-xl font-semibold">{t('inference.config')}</h3>
         </div>
 
         {/* 模型选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">预设模型</label>
+          <label className="text-sm font-medium">{t('preset.model')}</label>
           <Select 
             value={config.modelId} 
             onValueChange={(value) => handleConfigChange('modelId', value)}
@@ -80,19 +83,19 @@ export function InferenceCalculator() {
           {selectedModel && (
             <div className="p-3 bg-white/10 rounded-lg border border-white/20 text-xs space-y-1">
               <div className="flex justify-between">
-                <span>参数量:</span>
+                <span>{t('parameters')}:</span>
                 <span className="font-mono">{selectedModel.params}B</span>
               </div>
               <div className="flex justify-between">
-                <span>隐藏层大小:</span>
+                <span>{t('hidden.size')}:</span>
                 <span className="font-mono">{selectedModel.hiddenSize}</span>
               </div>
               <div className="flex justify-between">
-                <span>层数:</span>
+                <span>{t('layers')}:</span>
                 <span className="font-mono">{selectedModel.numLayers}</span>
               </div>
               <div className="flex justify-between">
-                <span>注意力头数:</span>
+                <span>{t('attention.heads')}:</span>
                 <span className="font-mono">{selectedModel.numHeads}</span>
               </div>
             </div>
@@ -102,7 +105,7 @@ export function InferenceCalculator() {
         {/* 精度和量化 */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-3">
-            <label className="text-sm font-medium">数值精度</label>
+            <label className="text-sm font-medium">{t('numerical.precision')}</label>
             <Select 
               value={config.precision} 
               onValueChange={(value: PrecisionType) => handleConfigChange('precision', value)}
@@ -119,7 +122,7 @@ export function InferenceCalculator() {
           </div>
 
           <div className="space-y-3">
-            <label className="text-sm font-medium">量化方式</label>
+            <label className="text-sm font-medium">{t('quantization.method')}</label>
             <Select 
               value={config.quantization} 
               onValueChange={(value: QuantizationType) => handleConfigChange('quantization', value)}
@@ -128,10 +131,10 @@ export function InferenceCalculator() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="None">无量化</SelectItem>
-                <SelectItem value="INT8">INT8 (4倍压缩)</SelectItem>
-                <SelectItem value="INT4">INT4 (8倍压缩)</SelectItem>
-                <SelectItem value="FP8">FP8 (4倍压缩)</SelectItem>
+                <SelectItem value="None">{t('no.quantization')}</SelectItem>
+                <SelectItem value="INT8">{t('int8.compression')}</SelectItem>
+                <SelectItem value="INT4">{t('int4.compression')}</SelectItem>
+                <SelectItem value="FP8">{t('fp8.compression')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -140,7 +143,7 @@ export function InferenceCalculator() {
         {/* 批次大小 */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">批次大小</label>
+            <label className="text-sm font-medium">{t('batch.size')}</label>
             <AnimatedNumber 
               value={config.batchSize} 
               className="text-sm font-mono text-green-600"
@@ -155,15 +158,15 @@ export function InferenceCalculator() {
             className="w-full"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>1 (单次推理)</span>
-            <span>32 (批量推理)</span>
+            <span>1 ({t('inference.single')})</span>
+            <span>32 ({t('inference.batch')})</span>
           </div>
         </div>
 
         {/* 序列长度 */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">序列长度</label>
+            <label className="text-sm font-medium">{t('sequence.length')}</label>
             <AnimatedNumber 
               value={config.sequenceLength} 
               className="text-sm font-mono text-purple-600"
@@ -186,7 +189,7 @@ export function InferenceCalculator() {
         {/* KV缓存比例 */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">KV缓存比例</label>
+            <label className="text-sm font-medium">{t('kv.cache.ratio')}</label>
             <AnimatedNumber 
               value={config.kvCacheRatio * 100} 
               format={(n) => `${n.toFixed(0)}%`}
@@ -202,8 +205,8 @@ export function InferenceCalculator() {
             className="w-full"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>10% (压缩)</span>
-            <span>100% (完整)</span>
+            <span>10% ({t('compressed')})</span>
+            <span>100% ({t('complete')})</span>
           </div>
         </div>
       </motion.div>
@@ -222,7 +225,7 @@ export function InferenceCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <Zap className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-xl font-semibold">推理显存</h3>
+            <h3 className="text-xl font-semibold">{t('inference.memory.requirement')}</h3>
           </div>
           
           <div className="text-center">
@@ -232,19 +235,19 @@ export function InferenceCalculator() {
                 format={formatMemorySize}
               />
             </div>
-            <p className="text-sm text-gray-600">总显存需求</p>
+            <p className="text-sm text-gray-600">{t('total.memory.requirement')}</p>
           </div>
 
           {/* 压缩效果显示 */}
           {config.quantization !== 'None' && (
             <div className="mt-4 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
               <div className="text-xs text-green-700 font-medium">
-                量化压缩效果
+                {t('quantization.compression.effect')}
               </div>
               <div className="text-sm mt-1">
-                {config.quantization === 'INT8' && '模型大小减少约75%'}
-                {config.quantization === 'INT4' && '模型大小减少约87.5%'}
-                {config.quantization === 'FP8' && '模型大小减少约75%'}
+                {config.quantization === 'INT8' && t('model.size.reduction.75')}
+                {config.quantization === 'INT4' && t('model.size.reduction.87.5')}
+                {config.quantization === 'FP8' && t('model.size.reduction.75')}
               </div>
             </div>
           )}
@@ -256,7 +259,7 @@ export function InferenceCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <BarChart3 className="w-5 h-5 text-blue-500" />
             </div>
-            <h3 className="text-lg font-semibold">显存分解</h3>
+            <h3 className="text-lg font-semibold">{t('memory.breakdown')}</h3>
           </div>
           
           <div className="space-y-4">
@@ -307,35 +310,35 @@ export function InferenceCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <Database className="w-5 h-5 text-purple-500" />
             </div>
-            <h3 className="text-lg font-semibold">优化建议</h3>
+            <h3 className="text-lg font-semibold">{t('optimization.suggestions')}</h3>
           </div>
           
           <div className="space-y-3 text-sm">
             {config.quantization === 'None' && (
               <div className="flex items-start gap-2 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
                 <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
-                <span>使用INT8量化可减少75%的模型显存，对精度影响很小</span>
+                <span>{t('use.int8.quantization')}</span>
               </div>
             )}
             
             {config.kvCacheRatio > 0.7 && config.sequenceLength > 4096 && (
               <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
                 <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
-                <span>长序列推理建议降低KV缓存比例以节省显存</span>
+                <span>{t('inference.long.sequence.suggestion')}</span>
               </div>
             )}
             
             {config.batchSize > 8 && (
               <div className="flex items-start gap-2 p-3 bg-orange-500/10 rounded-lg border border-orange-500/20">
                 <div className="w-2 h-2 rounded-full bg-orange-500 mt-1.5 flex-shrink-0" />
-                <span>大批次推理可提高吞吐量，但需要更多显存</span>
+                <span>{t('inference.large.batch.suggestion')}</span>
               </div>
             )}
 
             {selectedModel && selectedModel.params > 30 && config.quantization === 'None' && (
               <div className="flex items-start gap-2 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
                 <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
-                <span>大模型推理强烈建议使用量化以减少显存需求</span>
+                <span>{t('inference.large.model.suggestion')}</span>
               </div>
             )}
           </div>

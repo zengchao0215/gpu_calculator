@@ -10,6 +10,7 @@ import { LoadingOverlay } from '@/components/ui/loading-spinner';
 import { formatMemorySize } from '@/utils/memory-formulas';
 import { TrainingConfig, PrecisionType, OptimizerType } from '@/types';
 import { useCalculatorStore } from '@/store/calculator-store';
+import { useLanguage } from '@/contexts/language-context';
 
 export function TrainingCalculator() {
   const { 
@@ -18,6 +19,8 @@ export function TrainingCalculator() {
     trainingResult: memoryResult,
     trainingLoading: isLoading
   } = useCalculatorStore();
+  
+  const { t } = useLanguage();
 
   const handleConfigChange = (key: keyof TrainingConfig, value: unknown) => {
     setConfig({ [key]: value });
@@ -36,13 +39,13 @@ export function TrainingCalculator() {
           <div className="p-2 rounded-xl glass-card">
             <Brain className="w-5 h-5 text-blue-500" />
           </div>
-          <h3 className="text-xl font-semibold">训练配置</h3>
+          <h3 className="text-xl font-semibold">{t('training.config')}</h3>
         </div>
 
         {/* 模型参数量 */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">模型参数量</label>
+            <label className="text-sm font-medium">{t('model.parameters.count')}</label>
             <div className="flex items-center gap-2">
               <AnimatedNumber 
                 value={config.modelParams} 
@@ -113,7 +116,7 @@ export function TrainingCalculator() {
 
         {/* 精度选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">数值精度</label>
+                      <label className="text-sm font-medium">{t('numerical.precision')}</label>
           <Select 
             value={config.precision} 
             onValueChange={(value: PrecisionType) => handleConfigChange('precision', value)}
@@ -122,16 +125,16 @@ export function TrainingCalculator() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="FP32">FP32 (32位浮点)</SelectItem>
-              <SelectItem value="FP16">FP16 (16位浮点)</SelectItem>
-              <SelectItem value="BF16">BF16 (Brain Float 16)</SelectItem>
+              <SelectItem value="FP32">{t('fp32.32bit')}</SelectItem>
+              <SelectItem value="FP16">{t('fp16.16bit')}</SelectItem>
+              <SelectItem value="BF16">{t('bf16.brain.float')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* 优化器选择 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium">优化器</label>
+          <label className="text-sm font-medium">{t('optimizer')}</label>
           <Select 
             value={config.optimizer} 
             onValueChange={(value: OptimizerType) => handleConfigChange('optimizer', value)}
@@ -140,7 +143,7 @@ export function TrainingCalculator() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="AdamW">AdamW (推荐)</SelectItem>
+              <SelectItem value="AdamW">{t('adamw.recommended')}</SelectItem>
               <SelectItem value="Adam">Adam</SelectItem>
               <SelectItem value="SGD">SGD</SelectItem>
             </SelectContent>
@@ -150,7 +153,7 @@ export function TrainingCalculator() {
         {/* 高级选项 */}
         <div className="space-y-4 pt-4 border-t border-white/20">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">梯度检查点</span>
+            <span className="text-sm font-medium">{t('gradient.checkpointing')}</span>
             <button
               onClick={() => handleConfigChange('gradientCheckpointing', !config.gradientCheckpointing)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -164,7 +167,7 @@ export function TrainingCalculator() {
           </div>
           
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">混合精度训练</span>
+            <span className="text-sm font-medium">{t('training.mixed.precision')}</span>
             <button
               onClick={() => handleConfigChange('mixedPrecision', !config.mixedPrecision)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -193,7 +196,7 @@ export function TrainingCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <Zap className="w-5 h-5 text-orange-500" />
             </div>
-            <h3 className="text-xl font-semibold">显存需求</h3>
+            <h3 className="text-xl font-semibold">{t('memory.requirement')}</h3>
           </div>
           
           <div className="text-center">
@@ -203,7 +206,7 @@ export function TrainingCalculator() {
                 format={formatMemorySize}
               />
             </div>
-            <p className="text-sm text-gray-600">总显存需求</p>
+            <p className="text-sm text-gray-600">{t('total.memory.requirement')}</p>
           </div>
         </div>
 
@@ -213,7 +216,7 @@ export function TrainingCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <Activity className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold">显存分解</h3>
+            <h3 className="text-lg font-semibold">{t('memory.breakdown')}</h3>
           </div>
           
           <div className="space-y-4">
@@ -264,28 +267,28 @@ export function TrainingCalculator() {
             <div className="p-2 rounded-xl glass-card">
               <Settings className="w-5 h-5 text-purple-500" />
             </div>
-            <h3 className="text-lg font-semibold">优化建议</h3>
+            <h3 className="text-lg font-semibold">{t('optimization.suggestions')}</h3>
           </div>
           
           <div className="space-y-3 text-sm">
             {!config.gradientCheckpointing && (
               <div className="flex items-start gap-2 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
                 <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
-                <span>开启梯度检查点可减少约70%的激活值显存</span>
+                <span>{t('enable.gradient.checkpointing')}</span>
               </div>
             )}
             
             {config.precision === 'FP32' && (
               <div className="flex items-start gap-2 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
                 <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
-                <span>使用FP16或BF16可减少约50%的参数和梯度显存</span>
+                <span>{t('use.fp16.bf16')}</span>
               </div>
             )}
             
             {config.optimizer === 'AdamW' && config.modelParams > 30 && (
               <div className="flex items-start gap-2 p-3 bg-orange-500/10 rounded-lg border border-orange-500/20">
                 <div className="w-2 h-2 rounded-full bg-orange-500 mt-1.5 flex-shrink-0" />
-                <span>大模型建议考虑SGD优化器以减少优化器状态显存</span>
+                <span>{t('large.model.sgd')}</span>
               </div>
             )}
           </div>
