@@ -525,7 +525,16 @@ Content-Type: application/json
 
 ### 快速开始
 
-#### 1. 启动MCP服务器
+#### 方式1: npm全局安装（推荐）
+```bash
+# 安装MCP服务器
+npm install -g vram-calculator-mcp-server
+
+# 启动MCP服务器
+vram-calculator-mcp
+```
+
+#### 方式2: 本地开发模式
 ```bash
 npm run dev
 # MCP端点: http://localhost:3001/api/mcp

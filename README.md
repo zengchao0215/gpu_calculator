@@ -526,7 +526,16 @@ This project supports [Model Context Protocol (MCP)](https://modelcontextprotoco
 
 ### Quick Start
 
-#### 1. Start MCP Server
+#### Method 1: npm Global Installation (Recommended)
+```bash
+# Install MCP server
+npm install -g vram-calculator-mcp-server
+
+# Start MCP server
+vram-calculator-mcp
+```
+
+#### Method 2: Local Development Mode
 ```bash
 npm run dev
 # MCP endpoint: http://localhost:3001/api/mcp
