@@ -31,6 +31,7 @@
 - [Docker Deployment](#-docker-deployment)
 - [Project Structure](#-project-structure)
 - [API Documentation](#-api-documentation)
+- [MCP Protocol Support](#-mcp-protocol-support)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -74,6 +75,7 @@
 - **⌨️ Keyboard Shortcuts**: Improve operational efficiency
 - **📈 Performance Monitoring**: Real-time application performance monitoring
 - **🛡️ Error Handling**: Intelligent error prompts and recovery
+- **🤖 MCP Protocol Support**: Support for Model Context Protocol, enabling AI assistants to directly call VRAM calculation functions
 
 ### Data Support
 - **130+ Pre-trained Models**: Covering mainstream Chinese and international open-source models with intelligent classification
@@ -493,6 +495,96 @@ Content-Type: application/json
   "timestamp": "2024-01-01T00:00:00.000Z"
 }
 ```
+
+## 🤖 MCP Protocol Support
+
+This project supports [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), enabling AI assistants to directly call VRAM calculation functions through a standardized protocol.
+
+### MCP Server Information
+
+- **Server Name**: `vram-calculator-mcp-server`
+- **Protocol Version**: `2024-11-05`
+- **Endpoint**: `http://localhost:3001/api/mcp`
+
+### Supported Features
+
+#### 📚 Resources
+- **Model Database**: 130+ pre-trained model information
+- **GPU Specifications**: 20+ GPU detailed specs and pricing
+- **Calculation Formulas**: VRAM calculation formula documentation
+- **History Records**: Calculation history and statistics
+
+#### 🔨 Tools
+- **VRAM Calculation**: Inference, training, fine-tuning, GRPO, multimodal calculations
+- **GPU Recommendation**: Intelligent GPU recommendations and cost analysis
+- **Configuration Optimization**: Automatic configuration tuning and optimization suggestions
+
+#### 💬 Prompts
+- **Optimization Advice**: Professional VRAM optimization suggestions
+- **GPU Selection**: GPU selection guidance
+- **Technical Diagnosis**: Problem diagnosis and solutions
+
+### Quick Start
+
+#### 1. Start MCP Server
+```bash
+npm run dev
+# MCP endpoint: http://localhost:3001/api/mcp
+```
+
+#### 2. Connection Test
+```bash
+curl -X POST http://localhost:3001/api/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {},
+      "clientInfo": {"name": "test-client", "version": "1.0.0"}
+    },
+    "id": 1
+  }'
+```
+
+#### 3. Call GPU Recommendation Tool
+```bash
+curl -X POST http://localhost:3001/api/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "recommend_gpu",
+      "arguments": {"vramRequired": 16, "useCase": "training"}
+    },
+    "id": 2
+  }'
+```
+
+### AI Assistant Integration Example
+
+```javascript
+// Initialize MCP connection
+const mcpClient = new MCPClient('http://localhost:3001/api/mcp');
+await mcpClient.initialize();
+
+// Get GPU recommendations
+const recommendation = await mcpClient.callTool('recommend_gpu', {
+  vramRequired: 24,
+  useCase: 'training'
+});
+
+// Read model information
+const models = await mcpClient.readResource('models://nlp');
+```
+
+### Detailed Documentation
+
+- 📖 [MCP Implementation Summary](./MCP_IMPLEMENTATION_SUMMARY.md)
+- 🎯 [MCP Usage Examples](./MCP_USAGE_EXAMPLES.md)
+- 🧪 [Test Script](./test-mcp.js)
 
 ## 🤝 Contributing
 

@@ -31,6 +31,7 @@
 - [Docker部署](#-docker部署)
 - [项目结构](#-项目结构)
 - [API文档](#-api文档)
+- [MCP协议支持](#-mcp协议支持)
 - [贡献指南](#-贡献指南)
 - [许可证](#-许可证)
 
@@ -73,6 +74,7 @@
 - **⌨️ 键盘快捷键**：提高操作效率
 - **📈 性能监控**：实时监控应用性能
 - **🛡️ 错误处理**：智能错误提示和恢复
+- **🤖 MCP协议支持**：支持Model Context Protocol，AI助手可直接调用显存计算功能
 
 ### 数据支持
 - **130+ 预训练模型**：覆盖主流中国和国际开源模型，智能分类显示
@@ -492,6 +494,96 @@ Content-Type: application/json
   "timestamp": "2024-01-01T00:00:00.000Z"
 }
 ```
+
+## 🤖 MCP协议支持
+
+本项目支持 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)，AI助手可以通过标准化协议直接调用显存计算功能。
+
+### MCP服务器信息
+
+- **服务器名称**: `vram-calculator-mcp-server`
+- **协议版本**: `2024-11-05`
+- **端点地址**: `http://localhost:3001/api/mcp`
+
+### 支持的功能
+
+#### 📚 资源 (Resources)
+- **模型数据库**: 130+预训练模型信息
+- **GPU规格库**: 20+GPU详细规格和价格
+- **计算公式**: 显存计算公式文档
+- **历史记录**: 计算历史和统计信息
+
+#### 🔨 工具 (Tools)
+- **显存计算**: 推理、训练、微调、GRPO、多模态计算
+- **GPU推荐**: 智能GPU推荐和成本分析
+- **配置优化**: 自动配置调优和优化建议
+
+#### 💬 提示模板 (Prompts)
+- **优化建议**: 专业的显存优化建议
+- **GPU选择**: GPU选择指导
+- **技术诊断**: 问题诊断和解决方案
+
+### 快速开始
+
+#### 1. 启动MCP服务器
+```bash
+npm run dev
+# MCP端点: http://localhost:3001/api/mcp
+```
+
+#### 2. 连接测试
+```bash
+curl -X POST http://localhost:3001/api/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {},
+      "clientInfo": {"name": "test-client", "version": "1.0.0"}
+    },
+    "id": 1
+  }'
+```
+
+#### 3. 调用GPU推荐工具
+```bash
+curl -X POST http://localhost:3001/api/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "recommend_gpu",
+      "arguments": {"vramRequired": 16, "useCase": "training"}
+    },
+    "id": 2
+  }'
+```
+
+### AI助手集成示例
+
+```javascript
+// 初始化MCP连接
+const mcpClient = new MCPClient('http://localhost:3001/api/mcp');
+await mcpClient.initialize();
+
+// 获取GPU推荐
+const recommendation = await mcpClient.callTool('recommend_gpu', {
+  vramRequired: 24,
+  useCase: 'training'
+});
+
+// 读取模型信息
+const models = await mcpClient.readResource('models://nlp');
+```
+
+### 详细文档
+
+- 📖 [MCP实现总结](./MCP_IMPLEMENTATION_SUMMARY.md)
+- 🎯 [MCP使用示例](./MCP_USAGE_EXAMPLES.md)
+- 🧪 [测试脚本](./test-mcp.js)
 
 ## 🤝 贡献指南
 

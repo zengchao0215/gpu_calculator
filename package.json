@@ -2,6 +2,8 @@
   "name": "ai-memory-calculator",
   "version": "0.1.0",
   "private": true,
+  "description": "Professional VRAM requirement calculation tool for Large Language Models and Multimodal Models with MCP protocol support",
+  "keywords": ["vram", "gpu", "llm", "ai", "calculator", "mcp", "model-context-protocol", "memory", "training", "inference"],
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -10,10 +12,12 @@
     "start:prod": "NODE_ENV=production next start",
     "lint": "next lint",
     "test": "echo \"No tests configured\" && exit 0",
+    "test:mcp": "node test-mcp.js",
     "docker:build": "docker build -t ai-memory-calculator .",
     "docker:run": "docker run -p 3000:3000 ai-memory-calculator"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.2",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slider": "^1.3.5",
     "@radix-ui/react-tabs": "^1.1.12",
@@ -28,6 +32,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.25.67",
     "zustand": "^5.0.5"
   },
   "devDependencies": {
