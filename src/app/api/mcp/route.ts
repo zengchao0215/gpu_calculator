@@ -4,23 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { createVRAMCalculatorMCPServer } from '@/mcp/server';
 import { mcpLogger } from '@/mcp/logger';
-
-// 存储MCP服务器实例
-let mcpServer: McpServer | null = null;
-
-/**
- * 获取或创建MCP服务器实例
- */
-async function getMCPServer(): Promise<McpServer> {
-  if (!mcpServer) {
-    mcpServer = createVRAMCalculatorMCPServer();
-    mcpLogger.info("MCP服务器实例已创建");
-  }
-  return mcpServer;
-}
 
 /**
  * 处理POST请求 - 使用stdio传输模拟
@@ -285,17 +269,6 @@ export async function POST(req: NextRequest) {
           }
         });
     }
-
-    mcpLogger.info("MCP请求处理完成", { method: body.method, id: body.id });
-
-    return NextResponse.json(response, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      }
-    });
 
   } catch (error) {
     mcpLogger.error('MCP POST请求错误', error);
