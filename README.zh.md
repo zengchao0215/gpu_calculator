@@ -534,6 +534,17 @@ npm install -g vram-calculator-mcp-server
 vram-calculator-mcp
 ```
 
+**Claude Desktop集成**:
+```json
+{
+  "mcpServers": {
+    "vram-calculator": {
+      "command": "vram-calculator-mcp"
+    }
+  }
+}
+```
+
 #### 方式2: 本地开发模式
 ```bash
 npm run dev
@@ -593,6 +604,7 @@ const models = await mcpClient.readResource('models://nlp');
 - 📖 [MCP实现总结](./MCP_IMPLEMENTATION_SUMMARY.md)
 - 🎯 [MCP使用示例](./MCP_USAGE_EXAMPLES.md)
 - 🧪 [测试脚本](./test-mcp.js)
+- 📦 [npm包地址](https://www.npmjs.com/package/vram-calculator-mcp-server)
 
 ## 🤝 贡献指南
 

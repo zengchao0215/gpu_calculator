@@ -535,6 +535,17 @@ npm install -g vram-calculator-mcp-server
 vram-calculator-mcp
 ```
 
+**Claude Desktop Integration**:
+```json
+{
+  "mcpServers": {
+    "vram-calculator": {
+      "command": "vram-calculator-mcp"
+    }
+  }
+}
+```
+
 #### Method 2: Local Development Mode
 ```bash
 npm run dev
@@ -594,6 +605,7 @@ const models = await mcpClient.readResource('models://nlp');
 - 📖 [MCP Implementation Summary](./MCP_IMPLEMENTATION_SUMMARY.md)
 - 🎯 [MCP Usage Examples](./MCP_USAGE_EXAMPLES.md)
 - 🧪 [Test Script](./test-mcp.js)
+- 📦 [npm Package](https://www.npmjs.com/package/vram-calculator-mcp-server)
 
 ## 🤝 Contributing
 
