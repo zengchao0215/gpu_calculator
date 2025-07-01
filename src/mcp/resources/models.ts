@@ -146,7 +146,7 @@ export function registerModelResources(server: any) {
             int8: `${(model.params * 1).toFixed(1)}GB`,
             int4: `${(model.params * 0.5).toFixed(1)}GB`
           },
-          contextWindow: model.contextLength || 'Unknown',
+          contextWindow: (model as any).contextLength || 'Unknown',
           architecture: model.architecture,
           category: ['transformer', 'glm', 'moe'].includes(model.architecture) ? 'nlp' : 
                    ['multimodal', 'vision-text', 'audio-text', 'video-text', 'omnimodal'].includes(model.architecture) ? 'multimodal' : 'other'

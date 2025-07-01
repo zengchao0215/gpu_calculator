@@ -3,9 +3,11 @@
  * 提供各种AI助手交互的提示模板
  */
 
-import { 
+import {
   OptimizationPromptParamsSchema,
-  GPUSelectionPromptParamsSchema
+  GPUSelectionPromptParamsSchema,
+  OptimizationPromptParams,
+  GPUSelectionPromptParams
 } from '../types';
 import { mcpLogger } from '../logger';
 import { z } from 'zod';
@@ -30,6 +32,9 @@ const TrainingOptimizationParamsSchema = z.object({
   goals: z.string().describe('优化目标')
 });
 
+type TechnicalAnalysisParams = z.infer<typeof TechnicalAnalysisParamsSchema>;
+type TrainingOptimizationParams = z.infer<typeof TrainingOptimizationParamsSchema>;
+
 /**
  * 注册提示模板
  */
@@ -42,7 +47,7 @@ export function registerPromptTemplates(server: any) {
       description: "基于计算结果提供专业的显存优化建议",
       argsSchema: OptimizationPromptParamsSchema
     },
-    ({ calculationResult, targetVRAM, useCase }) => {
+    ({ calculationResult, targetVRAM, useCase }: OptimizationPromptParams) => {
       mcpLogger.info("生成显存优化建议提示", { targetVRAM, useCase });
       
       return {
@@ -106,7 +111,7 @@ ${targetVRAM ? `目标显存限制：${targetVRAM}GB` : '无特定显存限制'}
       description: "提供专业的GPU选择建议和配置指导",
       argsSchema: GPUSelectionPromptParamsSchema
     },
-    ({ requirements, budget, useCase }) => {
+    ({ requirements, budget, useCase }: GPUSelectionPromptParams) => {
       mcpLogger.info("生成GPU选择指导提示", { budget, useCase });
       
       return {
@@ -174,7 +179,7 @@ ${targetVRAM ? `目标显存限制：${targetVRAM}GB` : '无特定显存限制'}
       description: "诊断和解决AI模型部署中的技术问题",
       argsSchema: TechnicalAnalysisParamsSchema
     },
-    ({ issue, context, modelInfo, hardwareInfo }) => {
+    ({ issue, context, modelInfo, hardwareInfo }: TechnicalAnalysisParams) => {
       mcpLogger.info("生成技术诊断提示", { issue });
       
       return {
@@ -243,7 +248,7 @@ ${hardwareInfo ? `**硬件配置**：${hardwareInfo}` : ''}
       description: "优化模型训练配置和超参数",
       argsSchema: TrainingOptimizationParamsSchema
     },
-    ({ modelSize, currentConfig, issues, goals }) => {
+    ({ modelSize, currentConfig, issues, goals }: TrainingOptimizationParams) => {
       mcpLogger.info("生成训练优化提示", { modelSize, goals });
       
       return {

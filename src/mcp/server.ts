@@ -90,7 +90,16 @@ export function createVRAMCalculatorMCPServer(): McpServer {
     {
       title: "推理显存计算",
       description: "计算模型推理时的显存需求",
-      inputSchema: InferenceParamsSchema
+      inputSchema: {
+        type: "object",
+        properties: {
+          modelId: { type: "string" },
+          batchSize: { type: "number" },
+          sequenceLength: { type: "number" },
+          precision: { type: "string", enum: ["fp32", "fp16", "bf16", "int8", "int4"] }
+        },
+        required: ["modelId"]
+      } as any
     },
     async (params) => {
       try {

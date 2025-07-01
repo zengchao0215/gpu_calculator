@@ -233,7 +233,7 @@ export function registerGPUResources(server: any) {
         ...gpu,
         metadata: {
           memoryBandwidth: gpu.memory * 1000, // 估算带宽
-          powerEfficiency: gpu.memory / (gpu.features?.find(f => f.includes('W'))?.replace(/\D/g, '') || 300),
+          powerEfficiency: gpu.memory / (Number(gpu.features?.find(f => f.includes('W'))?.replace(/\D/g, '')) || 300),
           category: gpu.memory >= 24 ? 'enterprise' : gpu.memory >= 16 ? 'professional' : 'consumer',
           suitableFor: {
             inference: gpu.memory >= 8,
