@@ -6,7 +6,7 @@ export interface LogEntry {
   timestamp: string;
   level: 'info' | 'warn' | 'error' | 'debug';
   message: string;
-  data?: any;
+  data?: unknown;
   sessionId?: string;
   requestId?: string;
 }
@@ -18,7 +18,7 @@ class MCPLogger {
   private createLogEntry(
     level: LogEntry['level'],
     message: string,
-    data?: any,
+    data?: unknown,
     sessionId?: string,
     requestId?: string
   ): LogEntry {

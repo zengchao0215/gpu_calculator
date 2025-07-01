@@ -5,7 +5,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { randomUUID } from 'node:crypto';
 import { createVRAMCalculatorMCPServer } from '@/mcp/server';
 import { mcpLogger } from '@/mcp/logger';
 
@@ -63,8 +62,6 @@ export async function POST(req: NextRequest) {
     }
 
     // 处理其他MCP方法
-    const server = await getMCPServer();
-
     switch (body.method) {
       case 'resources/list':
         const response = {
@@ -319,8 +316,6 @@ export async function POST(req: NextRequest) {
  */
 export async function GET() {
   try {
-    const server = await getMCPServer();
-
     return NextResponse.json({
       name: "vram-calculator-mcp-server",
       version: "1.0.0",
