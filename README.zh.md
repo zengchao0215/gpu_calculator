@@ -53,15 +53,17 @@
 ## ✨ 功能特性
 
 ### 🆕 新版本亮点
-- **🔥 多模态模型支持**：新增独立多模态分组，支持文本+图像+音频+视频组合
-- **⚡ GRPO算法计算**：支持Group-wise Ranking Preference Optimization显存计算
-- **📊 智能标签页排序**：推理→微调→训练→GRPO，更符合使用频率
+- **🔥 高级微调支持**：新增专门的高级微调计算器，支持4种模型类型（NLP、多模态、MoE、CNN）
+- **⚡ 参数级显存控制**：精确控制模型架构参数（modelSize、hiddenSize、层数等）
+- **🛠️ 最近修复**：重大modelSize参数修复，NLP和多模态模型现在正确影响VRAM计算
+- **📊 智能标签页排序**：推理→微调→训练→GRPO→高级微调，更符合使用频率
 - **🎯 模型智能分类**：NLP模型和多模态模型完全隔离显示
 - **📈 正确计算公式**：基于通用LLM框架重写所有计算公式
 
 ### 核心功能
-- **🎯 五种计算模式**：推理、微调、训练、GRPO、多模态
+- **🎯 六种计算模式**：推理、微调、训练、GRPO、多模态、高级微调
 - **📊 精确计算**：基于最新工程实践和通用LLM框架的显存计算公式
+- **🔧 高级微调**：专门的NLP、多模态、MoE、CNN模型计算器，支持参数级控制
 - **🎨 可视化展示**：饼图展示显存组成，直观了解各部分占比
 - **💾 历史记录**：自动保存计算历史，支持对比分析
 - **🔧 配置预设**：12+预设模板，快速开始计算
@@ -179,7 +181,7 @@
 
 ## 📐 显存计算公式
 
-基于通用LLM框架和最新工程实践的精确计算公式：
+基于通用LLM框架和最新工程实践的精确计算公式。详细文档请参见 [VRAM计算公式文档](./docs/VRAM_CALCULATION_FORMULAS.zh.md)。
 
 ### 🔬 通用LLM框架
 
@@ -262,6 +264,42 @@ Total_Sequence_Length = 文本Token + 图像Patch + 音频Patch + 视频Patch
 - 音频序列长度 = 时长(ms) / 80ms
 
 激活值显存 = batch_size × Total_Sequence_Length × hidden_size × 层数 × 精度字节数
+```
+
+### 6. 高级微调显存计算 🆕
+
+**最近修复：modelSize参数现在正确影响VRAM计算**
+
+#### NLP模型微调
+```
+总显存 = 模型权重 + 优化器状态 + 梯度 + 激活值 + KV缓存
+
+其中：
+- 模型权重 = max(计算参数, modelSize × 1e9) × 精度字节数
+- 所有组件现在都能正确随modelSize参数缩放
+- 修复：7B→14B现在正确显示约130GB显存增加
+```
+
+#### 多模态模型微调
+```
+总显存 = 视觉编码器 + 文本编码器 + 融合层 + 训练组件
+
+其中：
+- 视觉编码器 = max(计算的视觉参数, modelSize × 0.3) × 精度字节数
+- 文本编码器 = max(计算的文本参数, modelSize × 0.5) × 精度字节数
+- 修复：7B→72B现在正确显示约693GB显存增加
+```
+
+#### MoE模型微调（已正常工作）
+```
+专家内存 = (modelSize / numExperts) × numActiveExperts × 精度字节数
+反向关系：更多专家 = 更小的单专家大小 = 更少的激活内存
+```
+
+#### CNN模型微调（已正常工作）
+```
+总显存 = 卷积层（80%）+ 全连接层（20%）+ 特征图
+所有组件都能正确随modelSize参数缩放
 ```
 
 #### 精度字节数对照表
@@ -455,7 +493,9 @@ ai-memory-calculator/
 │   ├── workers/             # Web Workers
 │   └── ...
 ├── docs/                    # 详细文档
-│   ├── memory-calculation-formulas.md # 计算公式详解
+│   ├── VRAM_CALCULATION_FORMULAS.md # 综合计算公式文档（英文）
+│   ├── VRAM_CALCULATION_FORMULAS.zh.md # 综合计算公式文档（中文）
+│   ├── memory-calculation-formulas.md # 传统计算公式详解
 │   └── deployment.md       # 部署指南
 ├── docker-compose.yml       # Docker编排
 ├── Dockerfile              # Docker镜像
@@ -752,6 +792,14 @@ const models = await mcpClient.readResource('models://nlp');
 加入我们的[GitHub Discussions](https://github.com/st-lzh/vram-wuhrai/discussions)参与功能规划和技术讨论。
 
 ## 🏆 更新日志
+
+### v2.1.0 (2024-12-19) 🎉
+- 🛠️ **重大参数修复**：修复NLP和多模态模型中关键的modelSize参数问题
+- ✨ **高级微调计算器**：新增专门的4种模型类型计算器（NLP、多模态、MoE、CNN）
+- 🔧 **参数级控制**：精确控制模型架构参数（hiddenSize、层数等）
+- 📊 **系统性验证**：所有8个核心参数经过测试验证，确保正常工作
+- 📚 **完善文档**：新增详细的VRAM计算公式文档
+- 🎯 **增强标签页顺序**：为专业用户新增高级微调标签页
 
 ### v2.0.0 (2024-06-23) 🎉
 - ✨ **新增多模态模型支持**：独立分组，支持文本+图像+音频+视频

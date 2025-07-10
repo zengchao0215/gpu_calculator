@@ -10,11 +10,58 @@ export type FineTuningMethod = 'Full' | 'LoRA' | 'QLoRA' | 'Prefix';
 // 量化类型
 export type QuantizationType = 'None' | 'INT8' | 'INT4' | 'FP8';
 
+// 模型架构类型
+export type ModelArchitectureType =
+  // NLP架构
+  | 'Transformer' | 'BERT' | 'GPT' | 'T5' | 'LLaMA' | 'ChatGLM'
+  // 多模态架构
+  | 'CLIP' | 'BLIP' | 'LLaVA' | 'GPT-4V' | 'Flamingo'
+  // MoE架构
+  | 'Switch Transformer' | 'GLaM' | 'PaLM-2' | 'DeepSeek-MoE'
+  // CNN架构
+  | 'ResNet' | 'EfficientNet' | 'ConvNeXt' | 'RegNet' | 'DenseNet';
+
+// 位置编码类型
+export type PositionEncodingType = 'Absolute' | 'Relative' | 'RoPE' | 'ALiBi';
+
+// LoRA目标模块类型
+export type LoRATargetModule = 'q_proj' | 'k_proj' | 'v_proj' | 'o_proj' | 'gate_proj' | 'up_proj' | 'down_proj';
+
+// 视觉编码器类型
+export type VisionEncoderType = 'ViT' | 'ConvNext' | 'ResNet';
+
+// 文本编码器类型
+export type TextEncoderType = 'BERT' | 'RoBERTa' | 'T5';
+
+// 模态融合策略
+export type ModalFusionStrategy = 'Cross-attention' | 'Co-attention' | 'Gated fusion';
+
+// 路由策略类型
+export type RoutingStrategy = 'Top-K' | 'Switch' | 'Expert Choice';
+
+// 专家初始化策略
+export type ExpertInitStrategy = 'Random' | 'Pretrained Inherit';
+
+// LoRA应用策略（MoE）
+export type LoRAApplicationStrategy = 'All Experts' | 'Partial Experts' | 'Router Only';
+
+// 池化策略类型
+export type PoolingStrategy = 'MaxPool' | 'AvgPool' | 'AdaptiveAvgPool';
+
+// 数据增强策略
+export type DataAugmentationStrategy = 'RandomCrop' | 'RandomFlip' | 'ColorJitter' | 'AutoAugment';
+
+// 学习率调度器类型
+export type LRSchedulerType = 'StepLR' | 'CosineAnnealingLR' | 'ReduceLROnPlateau';
+
+// 高级模型类型
+export type AdvancedModelType = 'NLP' | 'Multimodal' | 'MoE' | 'CNN';
+
 // 计算器类型
 export type CalculatorType = 'training' | 'inference' | 'finetuning' | 'grpo' | 'multimodal';
 
 // 添加主分组类型
-export type PrimaryTab = 'nlp' | 'multimodal';
+export type PrimaryTab = 'nlp' | 'multimodal' | 'advanced';
 
 // 多模态模式类型
 export type MultimodalMode = 'training' | 'inference' | 'finetuning';
@@ -80,6 +127,175 @@ export interface FineTuningConfig {
   loraAlpha?: number;
   quantization: QuantizationType;
   precision: PrecisionType;
+}
+
+// NLP模型微调超参数配置
+export interface NLPFineTuningConfig {
+  // 基础超参数
+  modelSize: number; // 125M ~ 175B+ 参数
+  architectureType: ModelArchitectureType;
+  precision: PrecisionType;
+  quantizationTech: QuantizationType;
+  batchSize: number; // 1-64
+  sequenceLength: number; // 512-32768
+  gradientAccumulationSteps: number; // 1-128
+  learningRate: number; // 1e-6 ~ 1e-4
+  optimizer: OptimizerType;
+  trainingEpochs: number; // 1-10
+
+  // NLP特有超参数
+  vocabSize: number; // 30k-100k
+  numAttentionHeads: number; // 8-128
+  hiddenSize: number; // 768-12288
+  intermediateSize: number; // 3072-49152
+  numLayers: number; // 12-96
+  positionEncodingType: PositionEncodingType;
+  loraRank: number; // 4-256
+  loraAlpha: number; // 16-128
+  loraTargetModules: LoRATargetModule[];
+  maxGenerationLength: number; // 256-4096
+  temperature: number; // 0.1-1.0
+  topP: number; // 0.9-0.95
+  repetitionPenalty: number; // 1.0-1.2
+
+  // 优化相关
+  weightDecay: number;
+  warmupSteps: number;
+  gradientClipping: number;
+  dropoutRate: number;
+}
+
+// 多模态模型微调超参数配置
+export interface MultimodalFineTuningConfig {
+  // 基础超参数
+  modelSize: number; // 1B ~ 100B+ 参数
+  architectureType: ModelArchitectureType;
+  precision: PrecisionType;
+  quantizationSupport: boolean;
+  batchSize: number; // 4-32
+  sequenceLength: number; // 256-2048
+  gradientAccumulationSteps: number; // 2-32
+  learningRate: number; // 1e-5 ~ 1e-4
+  optimizer: OptimizerType;
+  trainingEpochs: number; // 3-30
+
+  // 多模态特有超参数
+  imageResolution: number; // 224×224 ~ 1024×1024
+  patchSize: number; // 14×14 ~ 32×32
+  visionEncoderType: VisionEncoderType;
+  textEncoderType: TextEncoderType;
+  modalFusionStrategy: ModalFusionStrategy;
+  visionFeatureDim: number; // 768-1024
+  crossModalAlignmentWeight: number; // 0.1-1.0
+  imageTextContrastWeight: number; // 0.1-1.0
+  freezeVisionEncoder: boolean;
+  freezeTextEncoder: boolean;
+  loraVisionEncoder: boolean;
+  loraTextEncoder: boolean;
+  loraFusionLayer: boolean;
+
+  // 优化相关
+  weightDecay: number;
+  warmupSteps: number;
+  gradientClipping: number;
+  mixedPrecisionTraining: boolean;
+}
+
+// MoE模型微调超参数配置
+export interface MoEFineTuningConfig {
+  // 基础超参数
+  modelSize: number; // 1B ~ 1.6T 参数
+  architectureType: ModelArchitectureType;
+  precision: PrecisionType; // FP16, BF16推荐
+  quantizationSupport: boolean;
+  batchSize: number; // 8-64
+  sequenceLength: number; // 512-8192
+  gradientAccumulationSteps: number; // 2-16
+  learningRate: number; // 1e-5 ~ 5e-5
+  optimizer: OptimizerType; // AdamW推荐
+  trainingEpochs: number; // 1-5
+
+  // MoE特有超参数
+  numExperts: number; // 8-2048
+  numActiveExperts: number; // 1-8 (Top-K)
+  expertCapacityFactor: number; // 1.0-2.0
+  loadBalanceLossWeight: number; // 0.01-0.1
+  expertDropoutRate: number; // 0.0-0.1
+  routingStrategy: RoutingStrategy;
+  expertSpecialization: number; // 0.1-1.0
+  auxiliaryLossWeight: number; // 0.001-0.01
+  expertParallelism: number; // 1-8
+  expertInitStrategy: ExpertInitStrategy;
+  loraApplicationStrategy: LoRAApplicationStrategy;
+
+  // 优化相关
+  weightDecay: number;
+  warmupSteps: number;
+  gradientClipping: number;
+  expertRegularization: number;
+}
+
+// CNN模型微调超参数配置
+export interface CNNFineTuningConfig {
+  // 基础超参数
+  modelSize: number; // 5M ~ 500M 参数
+  architectureType: ModelArchitectureType;
+  precision: PrecisionType; // FP32, FP16, INT8
+  quantizationSupport: boolean;
+  batchSize: number; // 32-512
+  gradientAccumulationSteps: number; // 1-8
+  learningRate: number; // 1e-4 ~ 1e-2
+  optimizer: OptimizerType;
+  trainingEpochs: number; // 50-300
+
+  // CNN特有超参数
+  inputImageSize: number; // 224×224 ~ 512×512
+  kernelSize: number; // 3×3, 5×5, 7×7
+  poolingStrategy: PoolingStrategy;
+  dataAugmentationStrategy: DataAugmentationStrategy[];
+  frozenLayers: number; // 0-全部层数
+  classificationHeadDim: number; // 等于类别数
+  dropoutRate: number; // 0.1-0.5
+  weightDecay: number; // 1e-4 ~ 1e-2
+  lrScheduler: LRSchedulerType;
+  freezeBatchNorm: boolean;
+  mixedPrecisionTraining: boolean;
+
+  // 优化相关
+  warmupSteps: number;
+  gradientClipping: number;
+  labelSmoothing: number;
+}
+
+// 统一的高级微调配置
+export interface AdvancedFineTuningConfig {
+  modelType: AdvancedModelType;
+  nlpConfig?: NLPFineTuningConfig;
+  multimodalConfig?: MultimodalFineTuningConfig;
+  moeConfig?: MoEFineTuningConfig;
+  cnnConfig?: CNNFineTuningConfig;
+}
+
+// 扩展现有的MemoryBreakdown以支持新的计算结果
+export interface AdvancedMemoryBreakdown extends MemoryBreakdown {
+  // 新增的显存组成部分
+  visionEncoder?: number;
+  textEncoder?: number;
+  fusionLayer?: number;
+  expertRouting?: number;
+  expertActivation?: number;
+  convolutionLayers?: number;
+  featureMaps?: number;
+  dataAugmentation?: number;
+
+  // 扩展元数据
+  advancedMetadata?: {
+    modelType: AdvancedModelType;
+    optimizationSuggestions: string[];
+    memoryEfficiency: number;
+    computeEfficiency: number;
+    hardwareRecommendations: string[];
+  };
 }
 
 // GRPO配置

@@ -54,15 +54,17 @@
 ## ✨ Features
 
 ### 🆕 Version Highlights
-- **🔥 Multimodal Model Support**: New independent multimodal grouping supporting text+image+audio+video combinations
-- **⚡ GRPO Algorithm Calculation**: Support for Group-wise Ranking Preference Optimization VRAM calculation
-- **📊 Intelligent Tab Ordering**: Inference→Fine-tuning→Training→GRPO, aligned with usage frequency
+- **🔥 Advanced Fine-Tuning Support**: New dedicated advanced fine-tuning calculator with 4 model types (NLP, Multimodal, MoE, CNN)
+- **⚡ Parameter-Level VRAM Control**: Precise control over model architecture parameters (modelSize, hiddenSize, layers, etc.)
+- **🛠️ Recently Fixed**: Major modelSize parameter fixes for NLP and Multimodal models - now correctly affects VRAM calculations
+- **📊 Intelligent Tab Ordering**: Inference→Fine-tuning→Training→GRPO→Advanced Fine-tuning, aligned with usage frequency
 - **🎯 Smart Model Classification**: Complete isolation between NLP models and multimodal models
 - **📈 Correct Calculation Formulas**: All calculation formulas rewritten based on unified LLM framework
 
 ### Core Features
-- **🎯 Five Calculation Modes**: Inference, Fine-tuning, Training, GRPO, Multimodal
+- **🎯 Six Calculation Modes**: Inference, Fine-tuning, Training, GRPO, Multimodal, Advanced Fine-tuning
 - **📊 Precise Calculations**: VRAM calculation formulas based on latest engineering practices and unified LLM framework
+- **🔧 Advanced Fine-tuning**: Dedicated calculator for NLP, Multimodal, MoE, and CNN models with parameter-level control
 - **🎨 Visualization**: Pie charts showing VRAM composition for intuitive understanding of each component's proportion
 - **💾 History Records**: Automatic saving of calculation history with comparison analysis support
 - **🔧 Configuration Presets**: 12+ preset templates for quick calculation start
@@ -180,7 +182,7 @@
 
 ## 📐 VRAM Calculation Formulas
 
-Precise calculation formulas based on unified LLM framework and latest engineering practices:
+Precise calculation formulas based on unified LLM framework and latest engineering practices. For detailed documentation, see [VRAM Calculation Formulas](./docs/VRAM_CALCULATION_FORMULAS.md).
 
 ### 🔬 Unified LLM Framework
 
@@ -263,6 +265,42 @@ Where:
 - Audio Sequence Length = duration(ms) / 80ms
 
 Activation VRAM = batch_size × Total_Sequence_Length × hidden_size × layers × precision_bytes
+```
+
+### 6. Advanced Fine-Tuning VRAM Calculation 🆕
+
+**Recently Fixed: modelSize parameters now correctly affect VRAM calculations**
+
+#### NLP Model Fine-Tuning
+```
+Total VRAM = Model Weights + Optimizer States + Gradients + Activations + KV Cache
+
+Where:
+- Model Weights = max(calculated_params, modelSize × 1e9) × precision_bytes
+- All components now properly scale with modelSize parameter
+- Fixed: 7B→14B now correctly shows ~130GB VRAM increase
+```
+
+#### Multimodal Model Fine-Tuning
+```
+Total VRAM = Vision Encoder + Text Encoder + Fusion Layer + Training Components
+
+Where:
+- Vision Encoder = max(calculated_vision, modelSize × 0.3) × precision_bytes
+- Text Encoder = max(calculated_text, modelSize × 0.5) × precision_bytes
+- Fixed: 7B→72B now correctly shows ~693GB VRAM increase
+```
+
+#### MoE Model Fine-Tuning (Already Working)
+```
+Expert Memory = (modelSize / numExperts) × numActiveExperts × precision_bytes
+Inverse relationship: More experts = smaller per-expert size = less active memory
+```
+
+#### CNN Model Fine-Tuning (Already Working)
+```
+Total VRAM = Convolutional Layers (80%) + Fully Connected Layers (20%) + Feature Maps
+All components correctly scale with modelSize parameter
 ```
 
 #### Precision Bytes Reference Table
@@ -456,7 +494,9 @@ ai-memory-calculator/
 │   ├── workers/             # Web Workers
 │   └── ...
 ├── docs/                    # Detailed documentation
-│   ├── memory-calculation-formulas.md # Calculation formula details
+│   ├── VRAM_CALCULATION_FORMULAS.md # Comprehensive calculation formula documentation (EN)
+│   ├── VRAM_CALCULATION_FORMULAS.zh.md # Comprehensive calculation formula documentation (ZH)
+│   ├── memory-calculation-formulas.md # Legacy calculation formula details
 │   └── deployment.md       # Deployment guide
 ├── docker-compose.yml       # Docker orchestration
 ├── Dockerfile              # Docker image
@@ -753,6 +793,14 @@ We welcome contributions in various areas:
 Join our [GitHub Discussions](https://github.com/st-lzh/vram-wuhrai/discussions) to participate in feature planning and technical discussions.
 
 ## 🏆 Changelog
+
+### v2.1.0 (2024-12-19) 🎉
+- 🛠️ **Major Parameter Fix**: Fixed critical modelSize parameter issues in NLP and Multimodal models
+- ✨ **Advanced Fine-Tuning Calculator**: New dedicated calculator for 4 model types (NLP, Multimodal, MoE, CNN)
+- 🔧 **Parameter-Level Control**: Precise control over model architecture parameters (hiddenSize, layers, etc.)
+- 📊 **Systematic Validation**: All 8 core parameters tested and verified to work correctly
+- 📚 **Comprehensive Documentation**: New detailed VRAM calculation formula documentation
+- 🎯 **Enhanced Tab Order**: Added Advanced Fine-tuning tab for professional users
 
 ### v2.0.0 (2024-06-23) 🎉
 - ✨ **Added Multimodal Model Support**: Independent grouping supporting text+image+audio+video

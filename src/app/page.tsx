@@ -45,9 +45,17 @@ const FineTuningCalculator = dynamic(
 
 const GRPOCalculator = dynamic(
   () => import('@/components/calculators/grpo-calculator').then(mod => ({ default: mod.GRPOCalculator })),
-  { 
+  {
     loading: () => <div className="glass-card p-8 text-center">Loading...</div>,
-    ssr: false 
+    ssr: false
+  }
+);
+
+const AdvancedFineTuningCalculator = dynamic(
+  () => import('@/components/calculators/advanced-fine-tuning-calculator').then(mod => ({ default: mod.AdvancedFineTuningCalculator })),
+  {
+    loading: () => <div className="glass-card p-8 text-center">Loading...</div>,
+    ssr: false
   }
 );
 
@@ -285,7 +293,7 @@ export default function Home() {
           {/* 主分组标签页 */}
           <Tabs value={primaryTab} onValueChange={(value) => setPrimaryTab(value as typeof primaryTab)} className="w-full">
             <div className="flex justify-center mb-6">
-              <TabsList className="grid w-full max-w-md grid-cols-2">
+              <TabsList className="grid w-full max-w-2xl grid-cols-3">
                 <TabsTrigger value="nlp" className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4" />
                   <span>{t('tabs.nlp')}</span>
@@ -294,6 +302,10 @@ export default function Home() {
                   {/* eslint-disable-next-line jsx-a11y/alt-text */}
                   <Image className="w-4 h-4" />
                   <span>{t('tabs.multimodal')}</span>
+                </TabsTrigger>
+                <TabsTrigger value="advanced" className="flex items-center gap-2">
+                  <Brain className="w-4 h-4" />
+                  <span>{t('tabs.advanced')}</span>
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -428,6 +440,18 @@ export default function Home() {
                   </motion.div>
                 </TabsContent>
               </Tabs>
+            </TabsContent>
+
+            {/* 高级微调组 */}
+            <TabsContent value="advanced" className="space-y-6">
+              <motion.div
+                key="advanced-finetuning-content"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <AdvancedFineTuningCalculator />
+              </motion.div>
             </TabsContent>
           </Tabs>
         </motion.div>

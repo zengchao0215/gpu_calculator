@@ -73,7 +73,55 @@ export const FineTuningParamsSchema = z.object({
   quantization: z.enum(['none', 'int8', 'int4']).optional().describe('量化类型 (仅QLoRA)'),
 });
 
+/**
+ * 高级微调计算参数
+ */
+export const AdvancedFineTuningParamsSchema = z.object({
+  modelType: z.enum(['nlp', 'multimodal', 'moe', 'cnn']).describe('模型类型'),
+  modelSize: z.number().min(0.001).describe('模型大小(B)'),
+  architectureType: z.string().describe('架构类型'),
+  precision: z.enum(['fp32', 'fp16', 'bf16', 'int8', 'int4']).describe('训练精度'),
+  batchSize: z.number().min(1).describe('批次大小'),
+  sequenceLength: z.number().min(1).optional().describe('序列长度'),
+  learningRate: z.number().min(1e-8).max(1).describe('学习率'),
+  optimizer: z.enum(['sgd', 'adam', 'adamw']).describe('优化器类型'),
+  trainingEpochs: z.number().min(1).describe('训练轮数'),
+
+  // NLP特有参数
+  vocabSize: z.number().optional().describe('词汇表大小'),
+  numAttentionHeads: z.number().optional().describe('注意力头数'),
+  hiddenSize: z.number().optional().describe('隐藏层维度'),
+  numLayers: z.number().optional().describe('层数'),
+  loraRank: z.number().optional().describe('LoRA秩'),
+  loraAlpha: z.number().optional().describe('LoRA缩放系数'),
+
+  // 多模态特有参数
+  imageResolution: z.number().optional().describe('图像分辨率'),
+  patchSize: z.number().optional().describe('图像块大小'),
+  visionFeatureDim: z.number().optional().describe('视觉特征维度'),
+
+  // MoE特有参数
+  numExperts: z.number().optional().describe('专家数量'),
+  numActiveExperts: z.number().optional().describe('激活专家数量'),
+  expertCapacityFactor: z.number().optional().describe('专家容量因子'),
+
+  // CNN特有参数
+  inputImageSize: z.number().optional().describe('输入图像尺寸'),
+  kernelSize: z.number().optional().describe('卷积核大小'),
+
+  // 优化参数
+  weightDecay: z.number().optional().describe('权重衰减'),
+  warmupSteps: z.number().optional().describe('预热步数'),
+  gradientClipping: z.number().optional().describe('梯度裁剪'),
+  dropoutRate: z.number().optional().describe('Dropout率'),
+
+  // 语言参数
+  language: z.enum(['zh', 'en']).optional().describe('界面语言'),
+});
+
 export type FineTuningParams = z.infer<typeof FineTuningParamsSchema>;
+
+export type AdvancedFineTuningParams = z.infer<typeof AdvancedFineTuningParamsSchema>;
 
 /**
  * GRPO计算参数

@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { mcpLogger } from '@/mcp/logger';
+import { calculateAdvancedFineTuningMemory } from '@/utils/memory-formulas';
 
 /**
  * 处理POST请求 - 使用stdio传输模拟
@@ -96,6 +97,24 @@ export async function POST(req: NextRequest) {
                     useCase: { type: 'string', enum: ['inference', 'training', 'development'] }
                   }
                 }
+              },
+              {
+                name: 'calculate_advanced_finetuning_vram',
+                description: '计算高级微调配置的显存需求',
+                inputSchema: {
+                  type: 'object',
+                  properties: {
+                    modelType: { type: 'string', enum: ['nlp', 'multimodal', 'moe', 'cnn'], description: '模型类型' },
+                    modelSize: { type: 'number', description: '模型大小(B)' },
+                    architectureType: { type: 'string', description: '架构类型' },
+                    precision: { type: 'string', enum: ['fp32', 'fp16', 'bf16', 'int8', 'int4'], description: '训练精度' },
+                    batchSize: { type: 'number', description: '批次大小' },
+                    learningRate: { type: 'number', description: '学习率' },
+                    optimizer: { type: 'string', enum: ['sgd', 'adam', 'adamw'], description: '优化器' },
+                    trainingEpochs: { type: 'number', description: '训练轮数' }
+                  },
+                  required: ['modelType', 'modelSize', 'architectureType', 'precision', 'batchSize', 'learningRate', 'optimizer', 'trainingEpochs']
+                }
               }
             ]
           },
@@ -176,6 +195,56 @@ export async function POST(req: NextRequest) {
               'Access-Control-Allow-Origin': '*',
             }
           });
+        }
+
+        if (toolName === 'calculate_advanced_finetuning_vram') {
+          try {
+            // 调用实际的计算函数
+            const result = calculateAdvancedFineTuningMemory(toolArgs);
+
+            const toolResponse = {
+              jsonrpc: '2.0',
+              result: {
+                content: [{
+                  type: 'text',
+                  text: JSON.stringify(result, null, 2)
+                }]
+              },
+              id: body.id
+            };
+
+            mcpLogger.info("高级微调显存计算完成", {
+              modelType: toolArgs.modelType,
+              totalVRAM: result.total
+            });
+
+            return NextResponse.json(toolResponse, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              }
+            });
+          } catch (error) {
+            mcpLogger.error("高级微调显存计算失败", error);
+
+            const errorResponse = {
+              jsonrpc: '2.0',
+              error: {
+                code: -32603,
+                message: 'Calculation failed',
+                data: error instanceof Error ? error.message : String(error)
+              },
+              id: body.id
+            };
+
+            return NextResponse.json(errorResponse, {
+              status: 500,
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              }
+            });
+          }
         }
 
         // 其他工具的默认响应

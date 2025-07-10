@@ -14,13 +14,13 @@ import { useCalculatorStore } from '@/store/calculator-store';
 import { useLanguage } from '@/contexts/language-context';
 
 export function FineTuningCalculator() {
-  const { 
-    fineTuningConfig: config, 
+  const {
+    fineTuningConfig: config,
     setFineTuningConfig: setConfig,
     fineTuningResult: memoryResult,
     fineTuningLoading: isLoading
   } = useCalculatorStore();
-  
+
   const { t } = useLanguage();
 
   // 获取基础模型信息

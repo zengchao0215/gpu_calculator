@@ -1,22 +1,30 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { 
-  TrainingConfig, 
-  InferenceConfig, 
+import {
+  TrainingConfig,
+  InferenceConfig,
   FineTuningConfig,
   GRPOConfig,
   MultimodalConfig,
   MemoryBreakdown,
   CalculatorType,
   PrimaryTab,
-  NLP_CALCULATOR_TYPES
+  NLP_CALCULATOR_TYPES,
+  AdvancedFineTuningConfig,
+  AdvancedMemoryBreakdown,
+  AdvancedModelType,
+  NLPFineTuningConfig,
+  MultimodalFineTuningConfig,
+  MoEFineTuningConfig,
+  CNNFineTuningConfig
 } from '@/types';
-import { 
-  calculateTrainingMemory, 
-  calculateInferenceMemory, 
+import {
+  calculateTrainingMemory,
+  calculateInferenceMemory,
   calculateFineTuningMemory,
   calculateGRPOMemory,
-  calculateMultimodalMemory
+  calculateMultimodalMemory,
+  calculateAdvancedFineTuningMemory
 } from '@/utils/memory-formulas';
 
 interface CalculationHistory {
@@ -42,6 +50,7 @@ interface CalculatorStore {
   _fineTuningTimeout?: NodeJS.Timeout;
   _grpoTimeout?: NodeJS.Timeout;
   _multimodalTimeout?: NodeJS.Timeout;
+  _advancedFineTuningTimeout?: NodeJS.Timeout;
 
   // 训练配置
   trainingConfig: TrainingConfig;
@@ -74,6 +83,12 @@ interface CalculatorStore {
   fineTuningLoading: boolean;
   grpoLoading: boolean;
   multimodalLoading: boolean;
+  advancedFineTuningLoading: boolean;
+
+  // 高级微调配置
+  advancedFineTuningConfig: AdvancedFineTuningConfig;
+  setAdvancedFineTuningConfig: (config: Partial<AdvancedFineTuningConfig>) => void;
+  advancedFineTuningResult: AdvancedMemoryBreakdown | null;
 
   // 计算历史
   history: CalculationHistory[];
@@ -102,6 +117,7 @@ interface CalculatorStore {
   calculateFineTuningMemory: () => Promise<void>;
   calculateGRPOMemory: () => Promise<void>;
   calculateMultimodalMemory: () => Promise<void>;
+  calculateAdvancedFineTuningMemory: () => Promise<void>;
   
   // 获取当前结果
   getCurrentResult: () => MemoryBreakdown | null;
@@ -192,6 +208,42 @@ export const useCalculatorStore = create<CalculatorStore>()(
       fineTuningLoading: false,
       grpoLoading: false,
       multimodalLoading: false,
+      advancedFineTuningLoading: false,
+
+      // 高级微调配置默认值
+      advancedFineTuningConfig: {
+        modelType: 'NLP',
+        nlpConfig: {
+          modelSize: 7.0,
+          architectureType: 'LLaMA',
+          precision: 'FP16',
+          quantizationTech: 'None',
+          batchSize: 4,
+          sequenceLength: 2048,
+          gradientAccumulationSteps: 4,
+          learningRate: 2e-5,
+          optimizer: 'AdamW',
+          trainingEpochs: 3,
+          vocabSize: 50000,
+          numAttentionHeads: 32,
+          hiddenSize: 4096,
+          intermediateSize: 11008,
+          numLayers: 32,
+          positionEncodingType: 'RoPE',
+          loraRank: 16,
+          loraAlpha: 32,
+          loraTargetModules: ['q_proj', 'v_proj'],
+          maxGenerationLength: 2048,
+          temperature: 0.7,
+          topP: 0.9,
+          repetitionPenalty: 1.1,
+          weightDecay: 0.01,
+          warmupSteps: 100,
+          gradientClipping: 1.0,
+          dropoutRate: 0.1
+        }
+      },
+      advancedFineTuningResult: null,
 
       // 历史记录
       history: [],
@@ -265,6 +317,16 @@ export const useCalculatorStore = create<CalculatorStore>()(
         clearTimeout(get()._fineTuningTimeout);
         const timeout = setTimeout(() => get().calculateFineTuningMemory(), 300);
         set({ _fineTuningTimeout: timeout });
+      },
+
+      setAdvancedFineTuningConfig: (config) => {
+        set((state) => ({
+          advancedFineTuningConfig: { ...state.advancedFineTuningConfig, ...config }
+        }));
+        // 防抖计算 - 300ms后执行
+        clearTimeout(get()._advancedFineTuningTimeout);
+        const timeout = setTimeout(() => get().calculateAdvancedFineTuningMemory(), 300);
+        set({ _advancedFineTuningTimeout: timeout });
       },
 
       setGrpoConfig: (config) => {
@@ -455,6 +517,74 @@ export const useCalculatorStore = create<CalculatorStore>()(
         }
       },
 
+      calculateAdvancedFineTuningMemory: async () => {
+        const { advancedFineTuningConfig, preferences } = get();
+        set({ advancedFineTuningLoading: true });
+
+        try {
+          // 获取当前语言设置
+          const currentLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') || 'zh' : 'zh';
+
+          // 使用MCP API进行计算
+          const response = await fetch('/api/mcp', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              jsonrpc: '2.0',
+              method: 'tools/call',
+              params: {
+                name: 'calculate_advanced_finetuning_vram',
+                arguments: {
+                  ...advancedFineTuningConfig,
+                  language: currentLanguage
+                }
+              },
+              id: Date.now()
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (data.error) {
+            throw new Error(data.error.message || 'MCP API calculation failed');
+          }
+
+          // 解析MCP API返回的结果
+          const result = JSON.parse(data.result.content[0].text);
+          set({ advancedFineTuningResult: result, advancedFineTuningLoading: false });
+
+          // 自动保存到历史记录
+          if (preferences.autoSave) {
+            const modelName = `${advancedFineTuningConfig.modelType} Model`;
+            get().addToHistory('finetuning', advancedFineTuningConfig, result, modelName);
+          }
+        } catch (error) {
+          console.error('Advanced fine-tuning memory calculation error:', error);
+
+          // 如果MCP API失败，回退到本地计算
+          try {
+            console.log('Falling back to local calculation...');
+            const currentLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') || 'zh' : 'zh';
+            const result = calculateAdvancedFineTuningMemory(advancedFineTuningConfig, currentLanguage);
+            set({ advancedFineTuningResult: result, advancedFineTuningLoading: false });
+
+            if (preferences.autoSave) {
+              const modelName = `${advancedFineTuningConfig.modelType} Model`;
+              get().addToHistory('finetuning', advancedFineTuningConfig, result, modelName);
+            }
+          } catch (fallbackError) {
+            console.error('Local calculation also failed:', fallbackError);
+            set({ advancedFineTuningResult: null, advancedFineTuningLoading: false });
+          }
+        }
+      },
+
       getCurrentResult: () => {
         const { primaryTab, activeTab, trainingResult, inferenceResult, fineTuningResult, grpoResult, multimodalResult } = get();
         
@@ -495,4 +625,17 @@ export const useCalculatorStore = create<CalculatorStore>()(
       }),
     }
   )
-); 
+);
+
+// 监听语言变化事件，重新计算高级微调显存
+if (typeof window !== 'undefined') {
+  window.addEventListener('languageChanged', (event: any) => {
+    const store = useCalculatorStore.getState();
+    // 如果当前有高级微调结果，延迟重新计算以确保localStorage已更新
+    if (store.advancedFineTuningResult) {
+      setTimeout(() => {
+        store.calculateAdvancedFineTuningMemory();
+      }, 500); // 增加延迟到500ms确保localStorage已更新
+    }
+  });
+}
