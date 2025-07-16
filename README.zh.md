@@ -38,9 +38,12 @@
 ## 🖼️ 演示截图
 
 ### 主界面 - 训练显存计算
-![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-1.png)
+![训练显存计算界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/%E9%A6%96%E9%A1%B5.png)
 
 *专业的训练显存计算界面，支持模型参数、批次大小、序列长度、精度等配置，实时显示显存需求和GPU推荐*
+
+### 高级微调
+![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/%E9%AB%98%E7%BA%A7%E5%BE%AE%E8%B0%83.png)
 
 ### 单卡GPU推荐系统
 ![GPU推荐界面](https://wuhrai-wordpress.oss-cn-hangzhou.aliyuncs.com/github/vram/v2/vram-v2-02.png)
@@ -290,13 +293,13 @@ Total_Sequence_Length = 文本Token + 图像Patch + 音频Patch + 视频Patch
 - 修复：7B→72B现在正确显示约693GB显存增加
 ```
 
-#### MoE模型微调（已正常工作）
+#### MoE模型微调
 ```
 专家内存 = (modelSize / numExperts) × numActiveExperts × 精度字节数
 反向关系：更多专家 = 更小的单专家大小 = 更少的激活内存
 ```
 
-#### CNN模型微调（已正常工作）
+#### CNN模型微调
 ```
 总显存 = 卷积层（80%）+ 全连接层（20%）+ 特征图
 所有组件都能正确随modelSize参数缩放
