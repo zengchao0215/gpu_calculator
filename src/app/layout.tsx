@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wuhr AI VRAM Insight - Professional GPU Memory Calculator",
+  title: "乐享AI 算力计算器",
   description: "Professional AI model VRAM calculator supporting training, inference & fine-tuning modes with precise formulas based on latest engineering practices",
   keywords: ["AI", "GPU", "VRAM", "Memory Calculator", "Deep Learning", "Machine Learning", "Training", "Inference", "Fine-tuning"],
   authors: [{ name: "Wuhr AI Team", url: "https://wuhrai.com" }],

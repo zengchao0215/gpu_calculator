@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Gpu, Zap, AlertTriangle, CheckCircle, Star, Users, Calculator } from 'lucide-react';
 import { AnimatedNumber } from '@/components/animated-number';
-import { getGPURecommendations, getMultiGPURecommendations } from '@/lib/models-data';
+import { EXCHANGE_RATE, getGPURecommendations, getMultiGPURecommendations } from '@/lib/models-data';
 import { formatMemorySize, assessMemoryUsage } from '@/utils/memory-formulas';
 import { useLanguage } from '@/contexts/language-context';
 
@@ -191,7 +191,7 @@ export function GPURecommendations({ requiredMemoryGB, title }: GPURecommendatio
                       <div>
                         <div className="text-gray-500 text-xs">{t('gpu.total.price')}</div>
                         <div className="font-mono font-medium text-green-600">
-                          ${config.totalCost.toLocaleString()}
+                          ¥{config.totalCost}
                         </div>
                       </div>
                       <div>
@@ -299,14 +299,14 @@ export function GPURecommendations({ requiredMemoryGB, title }: GPURecommendatio
                         <div>
                           <div className="text-gray-500 text-xs">{t('gpu.market.price')}</div>
                           <div className="font-mono font-medium text-green-600">
-                            $<AnimatedNumber value={gpu.price} format={(n) => n.toLocaleString()} />
+                            ¥<AnimatedNumber value={gpu.price * EXCHANGE_RATE} format={(n) => n.toLocaleString()} />
                           </div>
                         </div>
 
                         <div>
                           <div className="text-gray-500 text-xs">{t('gpu.cloud.service')}</div>
                           <div className="font-mono font-medium text-blue-600">
-                            $<AnimatedNumber value={gpu.cloudPrice || 0} format={(n) => `${n.toFixed(2)}/h`} />
+                            ¥<AnimatedNumber value={(gpu.cloudPrice || 0) * EXCHANGE_RATE} format={(n) => `${n.toFixed(2)}/h`} />
                           </div>
                         </div>
                       </div>

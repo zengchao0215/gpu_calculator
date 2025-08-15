@@ -127,11 +127,20 @@ export const MODELS_DATABASE: ModelInfo[] = [
     numHeads: 64,
     vocabSize: 151936
   },
-
+  {
+    id: 'qwen3-235b',
+    name: '推荐模型-Qwen3-235B',
+    params: 235.0,
+    architecture: 'transformer',
+    hiddenSize: 8192,
+    numLayers: 94,
+    numHeads: 64,
+    vocabSize: 262144
+  },
   // DeepSeek系列
   {
     id: 'deepseek-v3-671b',
-    name: 'DeepSeek-V3-671B (满血版)',
+    name: '推荐模型-DeepSeek-V3-671B (满血版)',
     params: 671.0,
     architecture: 'moe',
     hiddenSize: 7168,
@@ -142,7 +151,7 @@ export const MODELS_DATABASE: ModelInfo[] = [
   },
   {
     id: 'deepseek-v3-0324',
-    name: 'DeepSeek-V3-0324',
+    name: '推荐模型-DeepSeek-V3-0324',
     params: 671.0,
     architecture: 'moe',
     hiddenSize: 7168,
@@ -164,7 +173,7 @@ export const MODELS_DATABASE: ModelInfo[] = [
   },
   {
     id: 'deepseek-r1-0528',
-    name: 'DeepSeek-R1-0528 (最新版)',
+    name: '推荐模型-DeepSeek-R1-0528 (最新版)',
     params: 685.0,
     architecture: 'moe',
     hiddenSize: 7168,
@@ -175,7 +184,7 @@ export const MODELS_DATABASE: ModelInfo[] = [
   },
   {
     id: 'deepseek-ai-deepseek-r1-0528',
-    name: 'deepseek-ai/DeepSeek-R1-0528',
+    name: '推荐模型-deepseek-ai/DeepSeek-R1-0528',
     params: 685.0,
     architecture: 'moe',
     hiddenSize: 7168,
@@ -473,6 +482,37 @@ export const MODELS_DATABASE: ModelInfo[] = [
     numLayers: 80,
     numHeads: 64,
     vocabSize: 151936
+  },
+  {
+    id: 'moonshot-kimi-k2',
+    name: 'Moonshot-kimi-k2',
+    params: 1024.0,
+    architecture: 'transformer',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 64,
+    vocabSize: 131027
+  },
+  // gpt
+  {
+    id: 'gpt-oss-120b',
+    name: 'gpt-oss-120b',
+    params: 120.0,
+    architecture: 'transformer',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 64,
+    vocabSize: 131027
+  },
+  {
+    id: 'gpt-oss-20b',
+    name: 'gpt-oss-20b',
+    params: 20.0,
+    architecture: 'transformer',
+    hiddenSize: 7168,
+    numLayers: 61,
+    numHeads: 64,
+    vocabSize: 131027
   },
 
   // 阶跃星辰系列
@@ -1352,6 +1392,38 @@ export const GPU_DATABASE: GPU[] = [
     price: 1500,
     cloudPrice: 0.25,
     features: ['GDDR5', 'Optimized for Inference', 'PCIe 3.0', '50W TDP']
+  },
+
+  //华为昇腾系列
+  {
+    id: '昇腾-910b',
+    name: '昇腾 910B',
+    memory: 64,
+    architecture: 'Pascal',
+    computeCapability: '6.1',
+    price: 17000,
+    cloudPrice: 0.25,
+    features: ['GDDR5', 'Optimized for Trains', 'PCIe 4.0', '310W TDP']
+  },
+  {
+    id: 'atlas-300',
+    name: 'Atlas 300',
+    memory: 24,
+    architecture: 'Pascal',
+    computeCapability: '6.1',
+    price: 1888,
+    cloudPrice: 0.25,
+    features: ['GDDR5', 'Optimized for Inference', 'PCIe 4.0', '72W TDP']
+  },
+  {
+    id: 'atlas-800',
+    name: 'Atlas 800 推理服务器（8卡）',
+    memory: 192,
+    architecture: 'Pascal',
+    computeCapability: '6.1',
+    price: 16888,
+    cloudPrice: 6,
+    features: ['GDDR5', 'Optimized for Inference', 'PCIe 4.0', '900W TDP']
   }
 ];
 
@@ -1403,6 +1475,7 @@ export interface MultiGPUConfig {
   suggestionParams?: Record<string, string | number>; // 翻译参数
 }
 
+export const EXCHANGE_RATE = 7.2; // 人民币对美元汇率
 export function getMultiGPURecommendations(requiredMemoryGB: number): MultiGPUConfig[] {
   const recommendations: MultiGPUConfig[] = [];
   
@@ -1425,7 +1498,7 @@ export function getMultiGPURecommendations(requiredMemoryGB: number): MultiGPUCo
           numNodes: 1,
           totalGPUs: gpusPerNode,
           totalMemory: gpuMemory * gpusPerNode,
-          totalCost: gpu.price * gpusPerNode,
+          totalCost: gpu.price * gpusPerNode * EXCHANGE_RATE,
           memoryPerNode: gpuMemory * gpusPerNode,
           suggestion: `单机${gpusPerNode}卡配置，${(gpuMemory * gpusPerNode).toFixed(0)}GB总显存`,
           suggestionKey: 'gpu.multi.single.machine.config',
@@ -1446,7 +1519,7 @@ export function getMultiGPURecommendations(requiredMemoryGB: number): MultiGPUCo
             numNodes: nodesNeeded,
             totalGPUs,
             totalMemory: gpuMemory * totalGPUs,
-            totalCost: gpu.price * totalGPUs,
+            totalCost: gpu.price * totalGPUs * EXCHANGE_RATE,
             memoryPerNode: gpuMemory * gpusPerNode,
             suggestion: `${nodesNeeded}台机器，每台${gpusPerNode}卡，共${totalGPUs}卡 ${(gpuMemory * totalGPUs).toFixed(0)}GB总显存`,
             suggestionKey: 'gpu.multi.multiple.machines.config',

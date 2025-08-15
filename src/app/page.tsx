@@ -525,33 +525,6 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 1.2 }}
         >
           <div className="glass-card inline-block p-4">
-            <p className="text-sm text-gray-600">
-              {t('footer.description')}
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              {t('footer.features')}
-            </p>
-            <div className="mt-4 flex justify-center items-center gap-4 text-xs">
-              <a href="https://wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
-                {t('footer.blog')}
-              </a>
-              <span className="text-gray-300 dark:text-gray-600">|</span>
-              <a href="https://ai.wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
-                {t('footer.api')}
-              </a>
-              <span className="text-gray-300 dark:text-gray-600">|</span>
-              <a href="https://gpt.wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
-                {t('footer.chat')}
-              </a>
-              <span className="text-gray-300 dark:text-gray-600">|</span>
-              <a href="https://github.com/st-lzh/vram-wuhrai.git" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
-                {t('footer.github')}
-              </a>
-              <span className="text-gray-300 dark:text-gray-600">|</span>
-              <a href="mailto:1139804291@qq.com" className="text-blue-500 hover:text-blue-600 transition-colors">
-                {t('footer.contact')}
-              </a>
-            </div>
             <p className="text-xs text-gray-400 mt-3">
               {t('footer.made')} <a href="https://wuhrai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Wuhr AI Team</a>
             </p>
