@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "乐享AI 算力计算器",
-  description: "Professional AI model VRAM calculator supporting training, inference & fine-tuning modes with precise formulas based on latest engineering practices",
+  description: "专业人工智能模型显存计算器，支持训练、推理和微调模式，基于最新工程实践提供精确公式",
   keywords: ["AI", "GPU", "VRAM", "Memory Calculator", "Deep Learning", "Machine Learning", "Training", "Inference", "Fine-tuning"],
-  authors: [{ name: "Wuhr AI Team", url: "https://wuhrai.com" }],
-  creator: "Wuhr AI",
-  publisher: "Wuhr AI",
+  // authors: [{ name: "Wuhr AI Team", url: "https://wuhrai.com" }],
+  // creator: "Wuhr AI",
+  // publisher: "Wuhr AI",
   robots: {
     index: true,
     follow: true,
@@ -31,29 +31,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  openGraph: {
-    title: "Wuhr AI VRAM Insight",
-    description: "Professional GPU memory calculator for AI models",
-    url: "https://vram.wuhrai.com",
-    siteName: "Wuhr AI VRAM Insight",
-    images: [
-      {
-        url: "https://vram.wuhrai.com/icon-512x512.png",
-        width: 512,
-        height: 512,
-        alt: "Wuhr AI VRAM Insight Preview",
-      },
-    ],
-    locale: "zh_CN",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Wuhr AI VRAM Insight",
-    description: "Professional GPU memory calculator for AI models",
-    images: ["https://vram.wuhrai.com/icon-512x512.png"],
-    creator: "@wuhr_ai",
   },
   viewport: {
     width: 'device-width',
